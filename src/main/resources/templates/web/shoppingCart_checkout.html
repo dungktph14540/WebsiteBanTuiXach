@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="author" content="mironcoder" />
+	<meta name="email" content="mironcoder@gmail.com" />
+	<meta name="profile" content="https://themeforest.net/user/mironcoder" />
+	<meta name="template" content="greeny" />
+	<meta name="title" content="greeny - Ecommerce Food Store HTML Template" />
+	<meta name="keywords"
+		content="organic, food, shop, ecommerce, store, html, bootstrap, template, agriculture, vegetables, products, farm, grocery, natural, online" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Web bán túi xách nam ADO</title>
+	<link rel="stylesheet" href="fonts/flaticon/flaticon.css" />
+	<link rel="stylesheet" href="fonts/icofont/icofont.min.css" />
+	<link rel="stylesheet" href="fonts/fontawesome/fontawesome.min.css" />
+	<link rel="stylesheet" href="vendor/venobox/venobox.min.css" />
+	<link rel="stylesheet" href="vendor/slickslider/slick.min.css" />
+	<link rel="stylesheet" href="vendor/niceselect/nice-select.min.css" />
+	<link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/main.css" />
+	<link rel="stylesheet" href="css/checkout.css" />
+
+</head>
+
+<body>
+
+	<!--************************************
+				Header Start
+		*************************************-->
+	<header th:replace="~{/web/fragments/header :: header}"></header>
+	<!--************************************
+				Header End
+		*************************************-->
+
+	<section class="inner-section single-banner" style="background: url(images/) no-repeat center">
+		<div class="container">
+			<h2>Thông tin đơn hàng</h2>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/}">Trang chủ</a></li>
+			</ol>
+		</div>
+	</section>
+	<section class="inner-section checkout-part">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="alert-info">
+						<p>
+						</p>
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<div class="account-card">
+						<div class="account-title">
+							<h4>Đơn Đặt Hàng Của Bạn</h4>
+						</div>
+						<div th:unless="${totalCartItems!=0}" class="text-center">
+							<h3 style="color: rgb(128, 128, 128)" class="mt-5">Hiện tại bạn chưa có sản phẩm nào trong
+								giỏ hàng!</h3>
+							<h4 style="color: rgb(128, 128, 128)">Hãy mua sắm đi nào!</h4>
+							<a th:href="@{/products}" style="text-decoration: underline;">Click tại đây!</a>
+						</div>
+						<div class="account-content">
+							<div class="table-scroll">
+								<table class="table-list" id="LstTbl" th:if="${totalCartItems!=0}">
+									<thead>
+										<tr>
+											<th hidden></th>
+											<th scope="col">#</th>
+											<th scope="col">Sản phẩm</th>
+											<th scope="col">Tên sản phẩm</th>
+											<th scope="col">Đơn giá</th>
+											<th scope="col">Thể loại</th>
+											<th scope="col">Kích thước</th>
+											<th scope="col">Số lượng</th>
+											<th scope="col">action</th>
+										</tr>
+									</thead>
+									<tbody id="myTableId">
+
+										<tr th:each="item,State : ${cartItems}" th:id="'row_'+${State.index + 1}">
+											<td th:name="checkbox" th:id="${State.index + 1}" hidden></td>
+											<td id="idproductCheckout" th:value="${item.product.productId}" hidden>
+												[[${item.product.productId}]]</td>
+											<td class="table-serial">
+												<span id="idRow">[[${State.index + 1}]]</span>
+											</td>
+											<td class="table-image">
+												<img th:src="@{'/loadImage?imageName='+${item.product.productImage}}"
+													alt="product" />
+											</td>
+											<td class="table-name">
+												<h6>[[${item.product.productName}]]</h6>
+											</td>
+											<td class="table-price" id="price">
+												[[${#numbers.formatDecimal((item.product.price - (item.product.price *
+												item.product.discount/100)) * item.quantity, 1, 'DEFAULT', 0,
+												'DEFAULT')}+ ' đ']]
+											</td>
+											<td class="table-brand">
+												<h6>[[${item.product.category.categoryName}]]</h6>
+											</td>
+											<td class="table-brand">
+												<h6>[[${item.SizeName}]]</h6>
+											</td>
+											<td class="table-quantity" style="width: 10%;">
+												<input type="number" id="quantity" class="form-control"
+													oninput="updateCheckout(this);LamTron();"
+													onblur="updateCheckout(this);" onclick="updateCheckout(this);"
+													th:value="${item.quantity}">
+											</td>
+											</td>
+											<td class="table-action">
+												<a class="view"
+													th:href="@{/productDetail(id=${item.product.productId})}"
+													title="Chi tiết sản phẩm">
+													<i class="fas fa-eye"></i>
+												</a>
+												<a class="view" th:id="'submitCheckout'+${State.index + 1}"
+													title="Cập nhật">
+													<i class="fa fa-edit"></i>
+												</a>
+
+												<a class="trash" href="javascript:void(0);" title="Xóa sản phẩm"
+													th:data-id="${item.product.productId}"
+													th:data-name="${item.product.productName}"
+													onclick="showConfigModalDialog(this.getAttribute('data-id'), this.getAttribute('data-name'))">
+													<i class="icofont-trash"></i>
+												</a>
+												<input type="text" id="quanPro" th:value="${item.product.quantity}"
+													hidden="hidden">
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<th:block th:if="${totalCartItems!=0}">
+								<div class="chekout-coupon">
+									<h4>Tổng tiền thanh toán</h4>
+								</div>
+								<div class="checkout-charge">
+									<ul>
+										<li>
+											<span>Tổng tiền hàng:</span>
+											<span id="tong">[[${#numbers.formatDecimal(totalPrice, 1, 'DEFAULT', 0,
+												'DEFAULT')}+ ' đ']]</span>
+										</li>
+										<li>
+											<span>Phí vận chuyển:</span>
+											<span id="PhiVC">Đ</span>
+										</li>
+
+										<li>
+											<span>Tổng thanh toán:</span>
+											<span id=Tongtien></span>
+										</li>
+									</ul>
+								</div>
+							</th:block>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-12" th:if="${totalCartItems!=0}">
+					<div class="account-card mb-0">
+						<div class="account-title">
+							<h4>Thông tin nhận hàng</h4>
+						</div>
+						<div class="account-content">
+							<div class="row">
+								<form class="user-form" th:action="@{/checkout}" th:object="${order}" method="post">
+									<div class="form-group">
+										<input type="email" th:value="${user.email}" class="form-control"
+											placeholder="Email" readonly="readonly" />
+									</div>
+
+									<div class="form-group">
+										<input type="text" th:value="${user.name}" class="form-control"
+											placeholder="Họ tên" readonly="readonly" />
+									</div>
+
+
+									<div class="form-group mt-3">
+										<input type="text" th:value="${user.address}" onblur="formatTrim();"
+											oninput="checktext();" id="resultInput" name="address" class="form-control"
+											placeholder="Địa chỉ" required="required" />
+										<span id="tb" style="display: none;color: red">Không được để
+											trống!</span>
+									</div>
+
+									<div class="form-group">
+										<input type="text" th:value="${user.sdt}" onblur="formatTrim();formatPhone();"
+											oninput="checktext();" id="phone" name="phone" class="form-control"
+											placeholder="Số điện thoại" required="required" />
+										<span id="tbsdt" style="display: none;color: red">Không được để
+											trống!</span>
+										<span id="tbphone" style="display: none; color: red;">Phone không hợp lệ!</span>
+									</div>
+
+									<div class="form-group">
+										<input type="text" class="form-control" placeholder="Nội dung đơn hàng" />
+									</div>
+									<div class="form-group mt-3">
+										<h6>Chọn danh sách tỉnh</h6>
+
+										<select name="" id="province">
+										</select>
+										<select name="" id="district">
+											<option value="">chọn quận</option>
+										</select>
+										<select name="" id="ward">
+											<option value="">chọn phường</option>
+										</select>
+
+
+
+										<h5 id="result"></h5>
+
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="flexRadioDefault"
+											id="flexRadioDefault1" th:field="*{loaiShip}" value="Ship hỏa tốc">
+										<label class="form-check-label" for="flexRadioDefault1">
+											Ship Hỏa tốc
+										</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="flexRadioDefault"
+											id="flexRadioDefault2" th:field="*{loaiShip}" value="Chuyển phát nhanh" checked>
+										<label class="form-check-label" for="flexRadioDefault2">
+											Chuyển phát nhanh
+										</label>
+									</div>
+									
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="flexRadioDefault"
+											id="flexRadioDefault3" th:field="*{loaiShip}"
+											value="Chuyển phát tiết kiệm hàng hóa">
+										<label class="form-check-label" for="flexRadioDefault3">
+											Chuyển phát tiết kiệm hàng hóa
+										</label>
+									</div>
+
+									<div class="form-group">
+										<div class="account-title">
+											<h4>Chọn phương thức thanh toán</h4>
+										</div>
+										<div class="radio">
+											<label style="color: rgb(128, 128, 128)"><input type="radio" value="cod"
+													name="checkOut" checked>
+												<strong><em>Ship COD ( Thanh toán khi nhận hàng )</em></strong></label>
+										</div>
+										<div class="radio">
+											<label style="color: rgb(128, 128, 128)"><input type="radio" value="paypal"
+													name="checkOut">
+												<strong><em>Thanh Toán Với Paypal (Ưu đãi phí ship
+														30000Đ)</em></strong></label>
+										</div>
+									</div>
+									<div class="checkout-proced">
+										<button type="submit" id="DH" class="btn btn-inline">Đặt hàng</button>
+									</div>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script type="text/javascript">
+		$(function () {
+
+			var a = $('#tong');
+			const b = $('#PhiVC') = 20000;
+			console.log(a);
+			console.log(b);
+			var c = (parseFloat(a) + parseFloat(b)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			console.log(c);
+			$('#Tongtien').text(c + " Đ");
+		})
+		function LamTron() {
+			$('#quantity').val(parseFloat($('#quantity').val()).toFixed());
+			if ($('#quantity').val().trim() == "") {
+				$('#quantity').val(1);
+			}
+		}
+		function checktext() {
+			if ($('#address').val().trim() == "") {
+				$('#tb').css({'display': 'block'});
+				$('#DH').prop('disabled', true);
+			} else {
+				$('#tb').css({'display': 'none'});
+				$('#DH').prop('disabled', false)
+			};
+			if ($('#phone').val().trim() == "") {
+				$('#tbsdt').css({'display': 'block'});
+				$('#DH').prop('disabled', true);
+			} else {
+				$('#tbsdt').css({'display': 'none'});
+				$('#DH').prop('disabled', false)
+			};
+		}
+		function formatTrim() {
+			$('#address').val($('#address').val().trim());
+			$('#name').val($('#name').val().trim());
+		}
+		function formatPhone() {
+			var phoneregx = /^\d{10}$/g;
+			if (phoneregx.test($('#phone').val())) {
+				$('#tbphone').css({'display': 'none'})
+				return true;
+			} else {
+				$('#tbphone').css({'display': 'block'})
+				return false;
+			}
+		}
+		/* $('#myTableId tr').click(function () {  
+			var index = $('#myTableId tr').index(this);  
+			var y = parseInt(index)+1;  
+			});   */
+		function updateCheckout(x) {
+			var y = x.closest('tr').rowIndex;
+			console.log(y);
+			var b = $('#row_' + y + ' #quantity').val().trim();
+			var a = $('#row_' + y + ' #idproductCheckout').text().trim();
+			var c = $('#row_' + y + ' #quanPro').val().trim();
+			if (parseInt(b) > parseInt(c)) {
+				$('#row_' + y + ' #quantity').val($('#row_' + y + ' #quanPro').val());
+				var e = $('#row_' + y + ' #quanPro').val().trim();
+				$('#submitCheckout' + y).attr('href', '/updateCheckout/' + a + '/' + e);
+			} else if (parseInt(b) < 1) {
+				$('#row_' + y + ' #quantity').val(1);
+				$('#submitCheckout' + y).attr('href', '/updateCheckout/' + a + '/' + 1);
+			}
+			else {
+				$('#submitCheckout' + y).attr('href', '/updateCheckout/' + a + '/' + b);
+			}
+			console.log(a);
+			console.log(b);
+		}
+
+		/* function totalPrice() {
+		  var tables = document.getElementsByName('checkbox');
+		  var tong = 0;
+		  for (var i = 0, td; i < tables.length; i++) {
+			var lst = {};
+			lst.price = $('#row_' + tables[i].id + ' #price').text();
+			lst.quantity = $('#row_' + tables[i].id + ' #quantity').val();
+			console.log(lst);
+			tong += parseInt(lst.price) * parseInt(lst.quantity);
+		  }
+		  console.log(tong);
+		  $('#tong').html(tong + ' đ');
+		} */
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<section class="news-part" style="background: url(images/) no-repeat center">
+		<div class="container">
+			<div class="row align-items-center">
+				<div class="col-md-5 col-lg-6 col-xl-7">
+
+				</div>
+				<div class="col-md-7 col-lg-6 col-xl-5">
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<script>
+		function showConfigModalDialog(id, name) {
+			$('#productName').text(name);
+			$('#yesOption').attr('href', '/remove/' + id);
+			$('#configmationId').modal('show');
+		}
+
+	</script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+	<script>
+
+		const host = "https://provinces.open-api.vn/api/";
+		var callAPI = (api) => {
+			return axios.get(api)
+				.then((response) => {
+					renderData(response.data, "province");
+				});
+		}
+		callAPI('https://provinces.open-api.vn/api/?depth=1');
+		var callApiDistrict = (api) => {
+			return axios.get(api)
+				.then((response) => {
+					renderData(response.data.districts, "district");
+				});
+		}
+		var callApiWard = (api) => {
+			return axios.get(api)
+				.then((response) => {
+					renderData(response.data.wards, "ward");
+				});
+		}
+
+		var renderData = (array, select) => {
+			let row = ' <option disable value="">chọn</option>';
+			array.forEach(element => {
+				row += `<option value="${element.code}">${element.name}</option>`
+			});
+			document.querySelector("#" + select).innerHTML = row
+		}
+
+		$("#province").change(() => {
+			callApiDistrict(host + "p/" + $("#province").val() + "?depth=2");
+			printResult();
+		});
+		$("#district").change(() => {
+			callApiWard(host + "d/" + $("#district").val() + "?depth=2");
+			printResult();
+		});
+		$("#ward").change(() => {
+			printResult();
+		})
+
+		var printResult = () => {
+			if ($("#district").val() != "" && $("#province").val() != "" &&
+				$("#ward").val() != "") {
+				let result = $("#province option:selected").text() +
+					" | " + $("#district option:selected").text() + " | " +
+					$("#ward option:selected").text();
+				$("#resultInput").val(result);
+			}
+
+		}
+
+	</script>
+	</script>
+	<!-- Modal -->
+	<div class="modal" id="configmationId">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<button class="modal-close" data-bs-dismiss="modal">
+					<i class="icofont-close"></i>
+				</button>
+				<div class="modal-form">
+					<h5 class="modal-title">Xác nhận</h5>
+					<div class="modal-body">
+						<p>
+							Bạn có muốn xoá sản phẩm " <span style="color: #119744" id="productName"></span> "
+							ra khỏi giỏ hàng không ?
+						</p>
+					</div>
+					<div class="modal-footer">
+						<a id="yesOption" type="button" class="btn btn-success">Có</a>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+	<!--************************************
+				Footer Start
+		*************************************-->
+	<footer th:replace="~{/web/fragments/footer :: footer}"></footer>
+
+	<!--************************************
+				Footer End
+		*************************************-->
+
+
+	<script src="vendor/bootstrap/jquery-1.12.4.min.js"></script>
+	<script src="vendor/bootstrap/popper.min.js"></script>
+	<script src="vendor/bootstrap/bootstrap.min.js"></script>
+	<script src="vendor/countdown/countdown.min.js"></script>
+	<script src="vendor/niceselect/nice-select.min.js"></script>
+	<script src="vendor/slickslider/slick.min.js"></script>
+	<script src="vendor/venobox/venobox.min.js"></script>
+	<script src="js/nice-select.js"></script>
+	<script src="js/countdown.js"></script>
+	<script src="js/accordion.js"></script>
+	<script src="js/venobox.js"></script>
+	<script src="js/slick.js"></script>
+	<script src="js/main.js"></script>
+
+
+
+</body>
+
+</html>

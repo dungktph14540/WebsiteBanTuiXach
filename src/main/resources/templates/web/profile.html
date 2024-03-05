@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="author" content="mironcoder" />
+	<meta name="email" content="mironcoder@gmail.com" />
+	<meta name="profile" content="https://themeforest.net/user/mironcoder" />
+	<meta name="template" content="greeny" />
+	<meta name="title" content="greeny - Ecommerce Food Store HTML Template" />
+	<meta name="keywords"
+		content="organic, food, shop, ecommerce, store, html, bootstrap, template, agriculture, vegetables, products, farm, grocery, natural, online" />
+	<title>Web bán túi xách nam ADO</title>
+	<link rel="stylesheet" href="fonts/flaticon/flaticon.css" />
+	<link rel="stylesheet" href="fonts/icofont/icofont.min.css" />
+	<link rel="stylesheet" href="fonts/fontawesome/fontawesome.min.css" />
+	<link rel="stylesheet" href="vendor/venobox/venobox.min.css" />
+	<link rel="stylesheet" href="vendor/slickslider/slick.min.css" />
+	<link rel="stylesheet" href="vendor/niceselect/nice-select.min.css" />
+	<link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/main.css" />
+	<link rel="stylesheet" href="css/profile.css" />
+	<style>
+		.tooltip {
+			position: relative;
+			display: inline-block;
+			border-bottom: 1px dotted black;
+		}
+
+		.tooltip .tooltiptext {
+			visibility: hidden;
+			width: 120px;
+			background-color: black;
+			color: #fff;
+			text-align: center;
+			border-radius: 6px;
+			padding: 5px 0;
+			/* Position the tooltip */
+			position: absolute;
+			z-index: 1;
+			bottom: 100%;
+			left: 50%;
+			margin-left: -60px;
+		}
+
+		.tooltip:hover .tooltiptext {
+			visibility: visible;
+		}
+	</style>
+</head>
+
+<body>
+	<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<meta name="author" content="mironcoder" />
+		<meta name="email" content="mironcoder@gmail.com" />
+		<meta name="profile" content="https://themeforest.net/user/mironcoder" />
+		<meta name="template" content="greeny" />
+		<meta name="title" content="greeny - Ecommerce Food Store HTML Template" />
+		<meta name="keywords"
+			content="organic, food, shop, ecommerce, store, html, bootstrap, template, agriculture, vegetables, products, farm, grocery, natural, online" />
+		<title>Web bán mũ bảo hiểm Otis</title>
+		<link rel="stylesheet" href="fonts/flaticon/flaticon.css" />
+		<link rel="stylesheet" href="fonts/icofont/icofont.min.css" />
+		<link rel="stylesheet" href="fonts/fontawesome/fontawesome.min.css" />
+		<link rel="stylesheet" href="vendor/venobox/venobox.min.css" />
+		<link rel="stylesheet" href="vendor/slickslider/slick.min.css" />
+		<link rel="stylesheet" href="vendor/niceselect/nice-select.min.css" />
+		<link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/main.css" />
+		<link rel="stylesheet" href="css/profile.css" />
+	</head>
+
+	<body>
+
+		<header th:replace="~{/web/fragments/header :: header}"></header>
+
+		<section class="inner-section single-banner"
+			style="background: url(images/showroom-XD-tmdt-Large.jpg) no-repeat center">
+			<div class="container">
+				<h2>thông tin tài khoản</h2>
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a th:href="@{/}">Trang chủ</a></li>
+
+				</ol>
+			</div>
+		</section>
+		<section class="inner-section profile-part">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="account-card">
+							<div class="account-title">
+								<h4>Thông tin tài khoản</h4>
+							</div>
+							<div class="account-content">
+								<form th:action="@{/updateUser}" method="post" th:object="${user}" class="user-form">
+									<div class="row">
+										<div class="col-lg-2">
+											<div class="profile-image">
+												<a href="javascript:void(0);"> <img
+														th:src="@{'/loadImage?imageName='+${user.avatar}}" alt="user" />
+												</a>
+											</div>
+										</div>
+										<div class="col-md-6 col-lg-4">
+											<div class="form-group">
+												<label class="form-label">Họ và tên</label> <input class="form-control"
+													type="text" th:value="${user.name}" id="name" name="name" onblur="validateName()" />
+												<span id="badgeName" class="badge text-white bg-danger"
+													style="padding: 8px 10px 5px 10px; margin: -15px 0 0 0; display: none;">Vui
+													lòng nhập họ và tên</span>
+
+											</div>
+										</div>
+										<div class="col-md-6 col-lg-6">
+											<div class="form-group">
+												<label class="form-label">Địa chỉ Email</label><input
+													class="form-control" type="email" th:value="${user.email}"
+													id="email" name="email" disabled />
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-2"></div>
+										<div class="col-md-6 col-lg-4">
+											<div class="form-group">
+												<label class="form-label">Số điện thoại</label> <input
+													class="form-control" type="text" th:value="${user.sdt}" id="sdt"
+													name="sdt" onblur="validatePhoneNumber()" />
+												<span id="badgenumber" class="badge text-white bg-danger"
+													style="padding: 8px 10px 5px 10px; margin: -15px 0 0 0; display: none;">Bạn
+													nhập sai định dạng số điện thoại hoặc không tồn tại ở
+													Việt Nam</span>
+											</div>
+										</div>
+										<div class="col-md-6 col-lg-6">
+											<div class="form-group">
+												<label class="form-label">Địa chỉ</label><input class="form-control"
+													type="text" th:value="${user.address}" id="address"
+													name="address" onblur="validateAddress()"/>
+												<span id="badgeAddr" class="badge text-white bg-danger"
+													style="padding: 8px 10px 5px 10px; margin: -15px 0 0 0; display: none;">Vui
+													lòng nhập địa chỉ</span>
+											</div>
+										</div>
+										
+									</div>
+									<div class="row">
+										<div class="col-lg-10"></div>
+										<div class="col-lg-2">
+											<button type="submit" class="btn btn-inline">Cập nhật</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-12">
+						<div class="account-card mb-0">
+							<div class="account-title">
+								<h4>Lịch sử đặt hàng</h4>
+							</div>
+							<section class="inner-section checkout-part">
+								<div class="container">
+									<div class="row">
+										<div class="col-lg-12">
+											<div class="account-card">
+												<div class="account-content">
+													<div class="table-scroll">
+														<table class="table-list">
+															<thead>
+																<tr>
+																	<th scope="col">Mã Order</th>
+																	<th scope="col">Ngày đặt</th>
+																	<th scope="col">Tổng tiền</th>
+																	<th scope="col">Địa chỉ</th>
+																	<th scope="col">Số điện thoại</th>
+																	<th scope="col">Trạng thái</th>
+																	<th scope="col">Hành động</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr th:each="item : ${orderByUser}">
+																	<td class="table-serial">
+																		<h6>[[${item.orderId}]]</h6>
+																	</td>
+																	<td class="table-name">
+																		<h6>[[${item.orderDate}]]</h6>
+																	</td>
+																	<td class="table-price">
+																		<h6>[[${#numbers.formatDecimal(item.amount,
+																			1, 'DEFAULT', 0, 'DEFAULT')}+' đ']]</h6>
+																	</td>
+																	<td class="table-address">
+																		<h6>[[${item.address}]]</h6>
+																	</td>
+																	<td class="table-brand">
+																		<h6>[[${item.phone}]]</h6>
+																	</td>
+																	<td class="table-status">
+																		<div th:if="${item.status==0}">
+																			<a style="cursor: pointer; color: #0e76a8;">
+																				<i class="fa fa-check-circle"> Chờ xác
+																					nhận</i>
+																			</a>
+																		</div>
+
+																		<div th:if="${item.status==1}">
+																			<a style="cursor: pointer; color: #ffab10;">
+																				<i class="fa fa-check-circle"> Đang gói
+																					hàng</i>
+																			</a>
+																		</div>
+																		<div th:if="${item.status==2}">
+																			<a style="cursor: pointer; color: #ffab10;">
+																				<i class="fa fa-check-circle"> Chờ vận
+																					chuyển</i>
+																			</a>
+																		</div>
+																		<div th:if="${item.status==3}">
+
+																			<a style="cursor: pointer; color: #ffab10;">
+																				<i class="fa fa-check-circle"> Đang giao
+																					hàng</i>
+																			</a>
+																		</div>
+																		<div th:if="${item.status==4}">
+																			<a style="cursor: pointer; color: #119744;">
+																				<i class="fa fa-check-circle"> Đã giao
+																					hàng</i>
+																			</a>
+																		</div>
+																		<div th:if="${item.status==5}">
+																			<a style="cursor:pointr; color: #ff3838;"
+																				data-toggle="tooltip"
+																				data-placement="top"
+																				th:title="${item.LyDo}"> <i
+																					class="fa fa-info-circle"> Đã
+																					hủy</i>
+																			</a>
+																		</div>
+																		<div th:if="${item.status==6}">
+																			<a style="cursor: pointr; color: #119744;">
+																				<i class="fa fa-check-circle"> Đã thanh
+																					toán</i>
+																			</a>
+																		</div>
+																		<div th:if="${item.status==7}">
+																			<a style="cursor: pointr; color: #ffab10;">
+																				<i class="fa fa-check-circle"> Đang gói
+																					hàng</i>
+																			</a>
+																		</div>
+																		<div th:if="${item.status==8}">
+																			<a style="cursor: pointr; color: #ffab10;">
+																				<i class="fa fa-check-circle"> Chờ vận
+																					chuyển</i>
+																			</a>
+																		</div>
+																		<div th:if="${item.status==9}">
+																			<a style="cursor: pointr; color: #ffab10;">
+																				<i class="fa fa-check-circle"> Đang giao
+																					hàng</i>
+																			</a>
+																		</div>
+																		<div th:if="${item.status==10}">
+																			<a style="cursor: pointr; color: #119744;">
+																				<i class="fa fa-check-circle"> Đã giao
+																					hàng</i>
+																			</a>
+																		</div>
+																	</td>
+
+																	<td class="table-action"><a class="view"
+																			th:href="@{'/order/detail/'+${item.orderId}}"
+																			title="Xem chi tiết"> <i
+																				class="fas fa-eye"></i>
+																		</a>
+																		<th:block th:if="${item.status==0}">
+																			<a class="trash" href="javascript:void(0);"
+																				title="Hủy đơn hàng"
+																				th:data-id="${item.orderId}"
+																				onclick="showConfigCancelModalDialog(this.getAttribute('data-id'))">
+																				<i class="icofont-trash"></i>
+																			</a>
+																		</th:block>
+																		<th:block th:if="${item.status!=0}">
+																			<a class="trash" href="javascript:void(0);"
+																				title="Không thể huỷ đơn hàng này"
+																				style="cursor: not-allowed"> <i
+																					class="icofont-trash"></i>
+																			</a>
+																		</th:block>
+																	</td>
+																</tr>
+
+															</tbody>
+														</table>
+
+														<!-- pagination  -->
+														<div class="row">
+															<div class="col-lg-12">
+																<div class="bottom-paginate">
+																	<p class="page-info"></p>
+																	<ul class="pagination">
+
+																		<li th:each="pageNumber : ${pageNumbers}"
+																			th:if="${orderByUser.totalPages > 0}"
+																			class="page-item"><a class="page-link"
+																				th:href="@{/profile(size=${orderByUser.size}, page=${pageNumber})}"
+																				th:class="${pageNumber==orderByUser.number + 1} ? 'page-link active'">
+																				[[${pageNumber}]] </a></li>
+
+																	</ul>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</section>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Huỷ đơn hàng -->
+		<script>
+			function showConfigCancelModalDialog(id) {
+				$('#idCancel').text(id);
+				$('#yesOptionCanCel').attr('href', '/order/cancel/' + id);
+				$('#configmationCancelId').modal('show');
+			}
+			$(function () {
+				$('[data-toggle="tooltip"]').tooltip()
+			})
+		</script>
+
+		<!-- Modal -->
+		<div class="modal" id="configmationCancelId">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<button class="modal-close" data-bs-dismiss="modal">
+						<i class="icofont-close"></i>
+					</button>
+					<div class="modal-form">
+						<h5 class="modal-title">Xác nhận</h5>
+						<div class="modal-body">
+							<p>
+								Bạn có muốn huỷ đơn hàng có mã " <span style="color: #119744" id="idCancel"></span> "
+								không ?
+							</p>
+						</div>
+						<div class="modal-footer">
+							<a id="yesOptionCanCel" type="button" class="btn btn-success">Có</a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+
+		<section class="news-part" style="background: url(images/slider4.png) no-repeat center">
+			<div class="container">
+				<div class="row align-items-center">
+					<div class="col-md-5 col-lg-6 col-xl-7"></div>
+					<div class="col-md-7 col-lg-6 col-xl-5"></div>
+				</div>
+			</div>
+		</section>
+
+
+
+		<!--************************************
+				Footer Start
+		*************************************-->
+		<footer th:replace="~{/web/fragments/footer :: footer}"></footer>
+		<!--************************************
+				Footer End
+		*************************************-->
+		<script src="vendor/bootstrap/jquery-1.12.4.min.js"></script>
+		<script src="vendor/bootstrap/popper.min.js"></script>
+		<script src="vendor/bootstrap/bootstrap.min.js"></script>
+		<script src="vendor/countdown/countdown.min.js"></script>
+		<script src="vendor/niceselect/nice-select.min.js"></script>
+		<script src="vendor/slickslider/slick.min.js"></script>
+		<script src="vendor/venobox/venobox.min.js"></script>
+		<script src="js/nice-select.js"></script>
+		<script src="js/countdown.js"></script>
+		<script src="js/accordion.js"></script>
+		<script src="js/venobox.js"></script>
+		<script src="js/slick.js"></script>
+		<script src="js/main.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<script>
+			function validatePhoneNumber() {
+				var phoneNumber = document.getElementById("sdt").value;
+				var regex = /(84|0[2|3|5|7|8|9])+([0-9]{8})\b/g;
+				var badgeIdtoida = document.getElementById("badgenumber");
+				var sdt = document.getElementById("sdt").value;
+				var badgeSdt = document.getElementById("badgeSdt");
+				if (!regex.test(phoneNumber)) {
+					badgeIdtoida.style.display = "block";
+				} else {
+					badgeIdtoida.style.display = "none";
+				}
+			};
+
+			function validateEmail() {
+				var phoneNumber = document.getElementById("email").value;
+				var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+				var checkemailKH = document.getElementById("checkemailKH");
+				if (!regex.test(phoneNumber)) {
+					badgeIdtoida.style.display = "block";
+				} else {
+					badgeIdtoida.style.display = "none";
+				}
+			};
+			function validateName() {
+				var name = document.getElementById("name").value;
+				var badgeName = document.getElementById("badgeName");
+
+				// Kiểm tra trường tên
+				if (name.trim() === "") {
+					badgeName.style.display = "block";
+				} else {
+					badgeName.style.display = "none";
+				}
+			};
+			function validateAddress() {
+				var address = document.getElementById("address").value;
+				var badgeAddr = document.getElementById("badgeAddr");
+
+				// Kiểm tra trường tên
+				if (address.trim() === "") {
+					badgeAddr.style.display = "block";
+				} else {
+					badgeAddr.style.display = "none";
+				}
+			}
+
+
+		</script>
+		
+
+	</body>
+
+	</html>

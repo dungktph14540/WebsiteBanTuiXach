@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="author" content="mironcoder" />
+	<meta name="email" content="mironcoder@gmail.com" />
+	<meta name="profile" content="https://themeforest.net/user/mironcoder" />
+	<meta name="template" content="greeny" />
+	<meta name="title" content="greeny - Ecommerce Food Store HTML Template" />
+	<meta name="keywords"
+		content="organic, food, shop, ecommerce, store, html, bootstrap, template, agriculture, vegetables, products, farm, grocery, natural, online" />
+	<title>Web bán túi xách nam ADO</title>
+	<link rel="stylesheet" href="fonts/flaticon/flaticon.css" />
+	<link rel="stylesheet" href="fonts/icofont/icofont.min.css" />
+	<link rel="stylesheet" href="fonts/fontawesome/fontawesome.min.css" />
+	<link rel="stylesheet" href="vendor/venobox/venobox.min.css" />
+	<link rel="stylesheet" href="vendor/slickslider/slick.min.css" />
+	<link rel="stylesheet" href="vendor/niceselect/nice-select.min.css" />
+	<link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/main.css" />
+	<style>
+		body {
+			font-family: Arial, Helvetica, sans-serif;
+		}
+
+		.flip-card {
+			background-color: transparent;
+			width: 300px;
+			height: 300px;
+			perspective: 1000px;
+		}
+
+		.flip-card-inner {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			text-align: center;
+			transition: transform 0.6s;
+			transform-style: preserve-3d;
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+		}
+
+		.flip-card:hover .flip-card-inner {
+			transform: rotateY(180deg);
+		}
+
+		.flip-card-front,
+		.flip-card-back {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
+		}
+
+		.flip-card-front {
+			background-color: #bbb;
+			color: black;
+		}
+
+		.flip-card-back {
+			background-color: #2980b9;
+			color: white;
+			transform: rotateY(180deg);
+		}
+
+		.shop-widget-scroll {
+			height: 100%;
+			overflow-y: hidden;
+			padding-right: 10px;
+		}
+	</style>
+</head>
+
+<body>
+
+	<!--************************************
+				Header Start
+		*************************************-->
+	<header th:replace="~{/web/fragments/header :: header}"></header>
+	<!--************************************
+				Header End
+		*************************************-->
+
+	<section class="inner-section single-banner" style="background: url(images/) no-repeat center">
+		<div class="container">
+			<h2>Sản phẩm</h2>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item">
+					<a th:href="@{/}">Trang chủ</a>
+				</li>
+			</ol>
+		</div>
+	</section>
+	<section class="inner-section shop-part">
+		<div class="container">
+			<div class="row content-reverse">
+				<div class="col-lg-3">
+					<div class="shop-widget-promo">
+						<a href="#"><img src="images/promo/shop/fv.jpg" alt="promo" /></a>
+					</div>
+					<form action="/searchCHP" method="get">
+						<div class="shop-widget">
+							<h6 class="shop-widget-title">Theo thể loại</h6>
+							<ul class="shop-widget-list shop-widget-scroll">
+								<li th:each="item : ${coutnProductByCategory}">
+									<div class="shop-widget-content">
+										<a href="javascript:void(0);" th:href="@{/productByCategory(id=${item[0]})}">
+											<label for="cate1" style="color: rgb(138, 138, 138)">[[${item[1]}]]</label>
+										</a>
+										<span class="shop-widget-number">([[${item[2]}]])</span>
+									</div>
+									<input class="form-check-input" type="radio" name="cateId"
+										th:value="${item[0]}">
+
+								</li>
+							</ul>
+
+
+						</div>
+						<div class="shop-widget">
+							<h6 class="shop-widget-title">Theo hãng</h6>
+							<ul class="shop-widget-list shop-widget-scroll">
+								<li th:each="item : ${countProductByBrand}">
+									<div class="shop-widget-content">
+										<a href="javascript:void(0);" th:href="@{/productByHang(id=${item[0]})}">
+											<label for="brand1" style="color: rgb(138, 138, 138)">[[${item[1]}]]</label>
+										</a>
+										<span class="shop-widget-number">([[${item[2]}]])</span>
+									</div>
+									<input class="form-check-input" type="radio" name="idhang"
+										th:value="${item[0]}">
+
+								</li>
+							</ul>
+						</div>
+						<div class="shop-widget">
+							<label for="customRange1" class="form-label">Giá tiền</label>
+							<input type="range" class="form-range" id="customRange1" name="price" min="0" max="10000000"
+								oninput="updateSliderValue(this.value)">
+							<span id="sliderValue">0</span> <span> VNĐ</span>
+
+							<script>
+								function updateSliderValue(value) {
+									const formattedValue = new Intl.NumberFormat('vi-VN').format(value);
+									document.getElementById("sliderValue").innerText = formattedValue;
+								}
+							</script>
+						</div>
+						<div class="shop-widget">
+							<button type="submit" class="btn btn-primary">Lọc</button>
+						</div>
+
+					</form>
+
+				</div>
+				<div class="col-lg-9">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="top-filter">
+								<div class="filter-show">
+									<label class="filter-label"></label>
+								</div>
+							</div>
+						</div>
+
+						<!-- item product -->
+
+						<div th:if="${error}" class="text-center alert alert-danger">
+							<p th:text="${error}"></p>
+
+						</div>
+						<div class="row row-cols-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4">
+							<div class="col" th:each="item : ${products}">
+								<div class="product-card">
+									<div class="product-media">
+										<div class="product-label">
+											<label class="label-text sale">- [[${item.discount + '%'}]]</label>
+										</div>
+
+										<th:block th:if="${user.email != null}">
+											<button class="product-wish" th:if="${item.favorite} == false">
+												<i class="fas fa-heart"></i>
+											</button>
+
+											<button class="product-wish" th:if="${item.favorite} == true"
+												style="color: #fd7e14">
+												<i class="fas fa-heart"></i>
+											</button>
+
+										</th:block>
+
+										<th:block th:if="${user.email == null}">
+											<button class="product-wish">
+												<i class="fas fa-heart"></i>
+											</button>
+										</th:block>
+
+										<a class="product-image" href="javascript:void(0);">
+											<img th:src="@{'/loadImage?imageName='+${item.productImage}}"
+												alt="product" />
+										</a>
+										<div class="product-widget">
+
+											<th:block href="/login" th:if="${user.email == null}">
+												<a title="Hãy đăng nhập" th:href="@{/login}" class="fas fa-heart">
+												</a>
+											</th:block>
+
+											<th:block th:if="${user.email != null}">
+												<a th:if="${item.favorite} == false" title="Yêu thích"
+													th:href="@{/doFavorite(id=${item.productId})}" class="fas fa-heart">
+												</a>
+
+												<a th:if="${item.favorite} == true" title="Xóa Yêu thích"
+													th:href="@{/doUnFavorite(id=${item.productId})}"
+													style="background-color: #fd7e14" class="fas fa-heart">
+												</a>
+											</th:block>
+
+										</div>
+									</div>
+									<div class="product-content">
+
+
+										<h6 class="product-name">
+											<a href="javascript:void(0);">[[${item.productName}]]</a>
+										</h6>
+										<h6 class="product-price">
+											<del>[[${#numbers.formatDecimal(item.price, 1, 'DEFAULT', 0, 'DEFAULT')}+'
+												đ']]</del>
+											<span>[[${#numbers.formatDecimal(item.price - (item.price *
+												item.discount/100), 1, 'DEFAULT', 0, 'DEFAULT')}+' đ']]</span>
+										</h6>
+										<h6 class="text" th:value="${item.quantity}">Kho:
+											[[${item.quantity}]]</h6>
+										<a class="product-add1"
+											th:title="${item.quantity>0}?'Sản phẩm đang còn' : 'Đã hết hàng'"
+											th:href="@{/productDetail(id=${item.productId})}">
+											<i class="fas fa-shopping-basket"></i>
+											<span data-bs-toggle="tooltip" data-bs-placement="bottom">Chi tiết sản
+												phẩm</span>
+										</a>
+
+
+
+
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="bottom-paginate">
+									<p class="page-info"></p>
+									<ul class="pagination">
+
+										<li th:each="pageNumber : ${pageNumbers}" th:if="${products.totalPages > 0}"
+											class="page-item">
+											<a class="page-link"
+												th:href="@{/products(size=${products.size}, page=${pageNumber})}"
+												th:class="${pageNumber==products.number + 1} ? 'page-link active'">
+												[[${pageNumber}]]
+											</a>
+										</li>
+
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</section>
+
+	<section class="news-part" style="background: url(images/) no-repeat center">
+		<div class="container">
+			<div class="row align-items-center">
+				<div class="col-md-5 col-lg-6 col-xl-7">
+					<div class="news-text">
+
+					</div>
+				</div>
+				<div class="col-md-7 col-lg-6 col-xl-5">
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+
+	<!--************************************
+				Footer Start
+		*************************************-->
+	<footer th:replace="~{/web/fragments/footer :: footer}"></footer>
+
+	<!--************************************
+				Footer End
+		*************************************-->
+
+
+	<script src="vendor/bootstrap/jquery-1.12.4.min.js"></script>
+	<script src="vendor/bootstrap/popper.min.js"></script>
+	<script src="vendor/bootstrap/bootstrap.min.js"></script>
+	<script src="vendor/countdown/countdown.min.js"></script>
+	<script src="vendor/niceselect/nice-select.min.js"></script>
+	<script src="vendor/slickslider/slick.min.js"></script>
+	<script src="vendor/venobox/venobox.min.js"></script>
+	<script src="js/nice-select.js"></script>
+	<script src="js/countdown.js"></script>
+	<script src="js/accordion.js"></script>
+	<script src="js/venobox.js"></script>
+	<script src="js/slick.js"></script>
+	<script src="js/main.js"></script>
+	<script>
+		$(function () {
+			$("#slide-ranger").slider({
+				ranger: true,
+				min: 0,
+				max: 10000000,
+				values: [500000, 1000000],
+				slide: function (event, ui) {
+					$("#amount").val("$" + ui.values[0] + "-$" + ui.values[1]);
+				}
+			});
+		});
+	</script>
+</body>
+
+</html>

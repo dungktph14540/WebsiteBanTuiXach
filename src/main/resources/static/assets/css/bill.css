@@ -1,0 +1,103 @@
+  /* Global Styles */
+  body {
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header Styles */
+.header {
+    background-color: #fff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #343a40;
+    color: #fff;
+    padding: 10px;
+}
+
+.navbar a {
+    color: #fff;
+}
+
+.navbar a:hover {
+    color: #17a2b8;
+}
+
+/* Main Panel Styles */
+.main-panel {
+    padding: 20px;
+}
+
+/* Tabs Styles */
+.nav-tabs {
+    overflow: auto;
+    white-space: nowrap;
+    margin-bottom: 15px;
+}
+
+.nav-link,
+.nav-item.add-tab {
+    display: inline-block;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    color: #000; /* Tab text color */
+}
+
+.nav-link.active {
+    background-color: #17a2b8; /* Active tab background color */
+    color: #fff; /* Active tab text color */
+}
+
+.nav-item.add-tab {
+    background-color: #343a40; /* "+" button background color */
+    color: #fff; /* "+" button text color */
+}
+
+.tab-content {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #f8f9fa;
+    padding: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+    text-align: center;
+}
+
+/* Breadcrumbs Styles */
+.breadcrumbs {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.breadcrumbs li {
+    display: inline;
+    margin-right: 5px;
+}
+
+.breadcrumbs i {
+    margin-right: 5px;
+}
+.close-tab {
+    cursor: pointer;
+    color: #343a40;
+    font-weight: bold;
+    font-size: 18px;
+    margin-left: 5px;
+}

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta charset="UTF-8" />
+	<title>Otis - Trang quản trị</title>
+	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon" />
+
+	<!-- Fonts and icons -->
+	<script src="/assets/js/plugin/webfont/webfont.min.js"></script>
+	<script>
+		WebFont.load({
+			google: { "families": ["Lato:300,400,700,900"] },
+			custom: { "families": ["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['/assets/css/fonts.min.css'] },
+			active: function () {
+				sessionStorage.fonts = true;
+			}
+		});
+	</script>
+
+	<!-- CSS Files -->
+	<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/assets/css/atlantis.min.css">
+	<!-- CSS Just for demo purpose, don't include it in your project -->
+	<link rel="stylesheet" href="/assets/css/demo.css">
+	<link rel="stylesheet" href="/assets/css/bill.css">
+
+	<link rel="stylesheet" href="/fonts/flaticon/flaticon.css" />
+	<link rel="stylesheet" href="/fonts/icofont/icofont.min.css" />
+
+
+	<style>
+
+	</style>
+</head>
+
+<body>
+	<div class="wrapper">
+		<!-- Header -->
+
+		<th:block th:replace="~{admin/fragments/header :: header}"></th:block>
+
+		<!-- End Header -->
+
+		<!-- Navbar -->
+
+		<th:block th:replace="~{admin/fragments/navbar :: navbar}"></th:block>
+
+		<!-- End Navbar -->
+
+		<div class="main-panel">
+			<div class="content">
+				<div class="page-inner">
+					<div class="page-header">
+						<h4 class="page-title">Quản lý hóa đơn</h4>
+						<ul class="breadcrumbs">
+							<li class="nav-home"><a href="javascript:void(0);"> <i class="flaticon-home"></i>
+								</a></li>
+							<li class="separator"><i class="flaticon-right-arrow"></i></li>
+							<li class="nav-item"><a href="javascript:void(0);">Trang
+									chủ</a></li>
+							<li class="separator"><i class="flaticon-right-arrow"></i></li>
+							<li class="nav-item"><a href="#">Quản lý hóa đơn</a></li>
+						</ul>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div th:if="${erroradd}" class="text-center alert alert-danger"
+								style="border-left: 24px solid red;">
+								<p th:text="${erroradd}"></p>
+							</div>
+							<div th:if="${errors}" class="text-center alert alert-danger"
+								style="border-left: 24px solid red;">
+								<p th:text="${errors}"></p>
+							</div>
+							<div th:if="${successadd}" class="text-center alert alert-success"
+								style="border-left: 24px solid #31ce36;">
+								<p th:text="${successadd}"></p>
+							</div>
+						</div>
+						<div class="col-md-7">
+							<div class="container mt-5">
+								<div class="nav-tabs" id="myTabs">
+									<a class="nav-link active" id="tab1-tab" data-toggle="tab" href="#tab1">Giỏ hàng
+									</a>
+								</div>
+
+								<!-- <div class="col-sm-6">
+											<button class="btn btn-primary" type="submit">Tạo hóa
+												đơn</button>
+										</div> -->
+								<div class="tab-content mt-2" style="height: 550px; overflow: scroll;">
+									<div class="tab-pane fade show active">
+										<div id="yourExistingContentId">
+											<form th:action="@{/admin/invoices/addInvoide}" method="post"
+												class="col-sm-12" th:object="${invoice}">
+												<div class="row">
+													<div class="col-sm-6">
+														<div class="form-group">
+															<label>Mã hóa đơn: </label>
+															<input class="form-control" th:field="*{invoiceId}"
+																type="text" readonly>
+														</div>
+														<div class="form-group">
+															<label>Tổng tiền: </label>
+															<input class="form-control" id="totalPriceInput"
+																th:field="*{amount}" type="text" readonly>
+														</div>
+													</div>
+													<div class="col-sm-6">
+														<div class="form-group">
+															<label>Tên khách hàng: </label>
+															<input class="form-control" th:field="*{username}"
+																type="text" required>
+														</div>
+														<div class="form-group">
+															<label>Số điện thoại: </label>
+															<input class="form-control" th:field="*{phonenumber}"
+																type="text" required>
+														</div>
+													</div>
+													<div class="col-md-12">
+														<table class="display table table-striped table-hover"
+															id="LstTbl">
+															<thead>
+																<tr>
+																	<th hidden></th>
+																	<th scope="col">#</th>
+																	<th scope="col">Sản phẩm</th>
+																	<th scope="col">Tên sản phẩm</th>
+																	<th scope="col">Thể loại</th>
+																	<th scope="col">Màu sắc</th>
+																	<th scope="col">Số lượng</th>
+																	<th scope="col">Đơn giá</th>
+																	<th scope="col">action</th>
+																</tr>
+															</thead>
+															<tbody id="myTableId">
+																<tr th:each="item,State : ${cartItems}"
+																	th:id="'row_'+${State.index + 1}">
+																	<td th:name="checkbox" th:id="${State.index + 1}"
+																		hidden>
+																	</td>
+
+																	<td id="idproductGio"
+																		th:value="${item.product.productId}" hidden>
+																		[[${item.product.productId}]]</td>
+																	<td class="table-serial">
+																		<span id="idRow">[[${State.index + 1}]]</span>
+																	</td>
+																	<td class="table-image">
+																		<img style="width: 100%;"
+																			th:src="@{'/loadImage?imageName='+${item.product.productImage}}"
+																			alt="product" />
+																	</td>
+																	<td class="table-name">
+																		<h6>[[${item.product.productName}]]</h6>
+																	</td>
+																	<td class="table-brand">
+																		<h6>[[${item.product.category.categoryName}]]
+																		</h6>
+																	</td>
+																	<td class="table-brand">
+																		<h6>[[${item.size.nameSize}]]</h6>
+																	</td>
+																	<td class="table-quantity" style="width: 15%;">
+																		<input type="number" id="quantity"
+																			class="form-control"
+																			oninput="updateInvoi(this);"
+																			onblur="updateInvoi(this);"
+																			onclick="updateInvoi(this);"
+																			th:value="${item.quantity}" required>
+																	</td>
+																	<td class="table-price" id="price">
+																		[[${#numbers.formatDecimal((item.product.price -
+																		(item.product.price *
+																		item.product.discount/100)) * item.quantity, 1,
+																		'DEFAULT', 0, 'DEFAULT')}+ ' đ']]
+																	</td>
+																	</td>
+																	<td class="table-action">
+																		<a class="view"
+																			th:id="'submitInvoice'+${State.index + 1}"
+																			title="Cập nhật">
+																			<i class="fa fa-edit"></i>
+																		</a>
+
+																		<a class="trash" href="javascript:void(0);"
+																			title="Xóa sản phẩm"
+																			th:data-id="${item.product.productId}"
+																			th:data-name="${item.product.productName}"
+																			onclick="showConfigModalDialogGio(this.getAttribute('data-id'), this.getAttribute('data-name'))">
+																			<i class="icofont-trash"></i>
+																		</a>
+																		<input type="text" id="quanPro"
+																			th:value="${item.product.quantity}"
+																			hidden="hidden">
+																	</td>
+																</tr>
+															</tbody>
+
+
+															<!-- <td class="table-action">
+
+																		<a class="view"
+																			th:id="'submitInvoice'+${State.index + 1}"
+																			title="Cập nhật">
+																			<i class="fa fa-edit"></i>
+																		</a>
+
+																		<a class="trash" href="javascript:void(0);"
+																			title="Xóa sản phẩm"
+																			th:data-id="${item.product.productId}"
+																			th:data-name="${item.product.productName}"
+																			onclick="showConfigModalDialogGio(this.getAttribute('data-id'), this.getAttribute('data-name'))">
+																			<i class="icofont-trash"></i>
+																		</a>
+																		<input type="text" id="quanPro"
+																			th:value="${item.product.quantity}"
+																			hidden="hidden">
+																	</td>
+																	<script>
+																		function updateInvoi(x) {
+																			var y = x.closest('tr').rowIndex;
+																			console.log(y);
+
+																			var b = $('#row_' + y + ' #quantity').val().trim();
+																			var a = $('#row_' + y + ' #idproductGio').text().trim();
+
+																			// Lấy hai số cuối cùng của productId
+
+																			var c = $('#row_' + y + ' #quanPro').val().trim();
+
+																			if (parseInt(b) > parseInt(c)) {
+																				$('#row_' + y + ' #quantity').val($('#row_' + y + ' #quanPro').val());
+																				var e = $('#row_' + y + ' #quanPro').val().trim();
+																				var d = console.log(a);
+																				$('#submitnoInvoice' + y).attr('href', '/admin/updateInvoice/' + d + '/' + e);
+																			} else if (parseInt(b) < 1) {
+																				$('#row_' + y + ' #quantity').val(1);
+																				$('#submitInvoice' + y).attr('href', '/admin/updateInvoice/' + a + '/' + 1);
+																			} else {
+																				$('#submitInvoice' + y).attr('href', '/admin/updateInvoice/' + a + '/' + b);
+																			}
+
+																			console.log(a);
+																			console.log(b);
+																		}
+
+																	</script>
+																	<script>
+																		function showConfigModalDialogGio(id, name) {
+																			$('#productName').text(name);
+																			$('#yesOption').attr('href', '/admin/removeInvoice/' + id);
+																			$('#configmationId').modal('show');
+																		}
+
+																	</script>
+
+																</tr>
+															</tbody> -->
+														</table>
+														<button class="btn btn-primary" type="submit">
+															Tạo hóa đơn
+														</button>
+													</div>
+
+													<script>
+														function showConfigModalDialogHoaDon() {
+															$('#productName').text(name);
+															$('#yesOption').attr('href', '/admin/removeInvoice/' + id);
+															$('#configmationId').modal('show');
+														}
+													</script>
+												</div>
+											</form>
+										</div>
+
+									</div>
+									</form>
+								</div>
+
+							</div>
+						</div>
+
+						<script>
+							function updateInvoi(x) {
+								var y = x.closest('tr').rowIndex;
+								console.log(y);
+
+								var b = $('#row_' + y + ' #quantity').val().trim();
+								var a = $('#row_' + y + ' #idproductGio').text().trim();
+
+								// Đếm số ký tự của chuỗi a
+								var numberOfCharacters = a.length;
+								console.log("Số ký tự của a: " + numberOfCharacters);
+
+								// Lấy số lượng chữ số cần cắt
+								var digitsToCut = Math.floor(numberOfCharacters / 2);
+
+								// // Cắt chữ số theo quy tắc
+								// var productIdLastDigits = a.slice(-digitsToCut);
+
+								var c = $('#row_' + y + ' #quanPro').val().trim();
+
+								if (parseInt(b) > parseInt(c)) {
+									$('#row_' + y + ' #quantity').val($('#row_' + y + ' #quanPro').val());
+									var e = $('#row_' + y + ' #quanPro').val().trim();
+									$('#submitInvoice' + y).attr('href', '/admin/updateInvoice/' + a + '/' + e);
+								} else if (parseInt(b) < 1) {
+									$('#row_' + y + ' #quantity').val(1);
+									$('#submitInvoice' + y).attr('href', '/admin/updateInvoice/' + a + '/' + 1);
+								} else {
+									$('#submitInvoice' + y).attr('href', '/admin/updateInvoice/' + a + '/' + b);
+								}
+
+								console.log(a);
+								console.log(b);
+							}
+
+						</script>
+						<script>
+							function showConfigModalDialogGio(id, name) {
+								$('#productName').text(name);
+								$('#yesOption').attr('href', '/admin/removeInvoice/' + id);
+								$('#configmationId').modal('show');
+							}
+
+						</script>
+						<div class="modal" id="configmationId">
+							<div class="modal-dialog modal-dialog-centered">
+								<div class="modal-content">
+									<button class="modal-close" data-bs-dismiss="modal">
+										<i class="icofont-close"></i>
+									</button>
+									<div class="modal-form">
+										<h5 class="modal-title">Xác nhận</h5>
+										<div class="modal-body">
+											<p>
+												Bạn có muốn xoá sản phẩm " <span style="color: #119744"
+													id="productName"></span>
+												"
+												ra khỏi giỏ hàng không ?
+											</p>
+										</div>
+										<div class="modal-footer">
+											<a id="yesOption" type="button" class="btn btn-success">Có</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-5">
+							<div class="container mt-5">
+								<div class="nav-tabs">
+									<a class="nav-link active">Tìm kiếm sản phẩm
+									</a>
+									<div class="nav-link float-right" style="border: none;">
+										<button class="btn btn-primary btn-round ml-auto" data-toggle="modal"
+											data-target="#cameraModal" onclick="openCamera()">
+											<i class="bi bi-qr-code-scan"></i>
+											Quét QR
+										</button>
+									</div>
+								</div>
+								<div class="modal fade" id="cameraModal" tabindex="-1" role="dialog"
+									aria-labelledby="cameraModalLabel" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="cameraModalLabel">Camera</h5>
+												<button type="button" class="close" data-dismiss="modal"
+													aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<video id="video" width="100%" height="auto" autoplay></video>
+											</div>
+										</div>
+									</div>
+								</div>
+								<form th:action="@{/admin/invoices/search}" method="get">
+
+									<div class="input-group mb-3">
+										<input name="searchTerm" id="searchTerm" type="text" class="form-control"
+											placeholder="Tên sản phẩm hoặc mã sản phẩm" aria-label="Tên sản phẩm"
+											aria-describedby="basic-addon2">
+										<div class="input-group-append">
+											<button class="btn btn-outline-secondary" type="submit">Search</button>
+										</div>
+									</div>
+								</form>
+								<div class="row" style="max-height: 500px; overflow-y: auto;">
+									<div class="card" style="width: 95%; padding: 15px; margin-left: 20px;"
+										th:each="item : ${matchedProducts}">
+										<form action="/admin/invoices/addToCart" method="post">
+
+											<div class="row no-gutters">
+												<div class="col-md-4">
+													<img th:src="@{'/loadImage?imageName='+${item.productImage}}"
+														style="max-width: 100%; height: auto;">
+												</div>
+												<div class="col-md-8">
+													<div class="card-body">
+														<h5 class="card-title">Mã sản phẩm:
+															[[${item.productId}]]</h5>
+														<input type="hidden" name="productId"
+															th:value="${item.productId}">
+
+														<h5 class="card-title">Tên sản phẩm:
+															[[${item.productName}]]
+														</h5>
+														<input type="hidden" name="sizeId"
+															th:value="${item.size.sizeId}">
+														<div>
+															<span>Màu sắc: [[${item.size.nameSize}]]</span>
+														</div>
+														<div>Số lượng: <input name="quantity" type="number" min="1"
+																max="50" value="1">
+															<span id="badgeId" class="badge text-white bg-info"
+																style="padding: 8px 10px 5px 10px; margin: 0 0 0 0px;">[[${item.quantity}]]
+																sản phẩm có sẵn</span>
+
+
+														</div><br>
+														<div>Đơn giá: [[${item.price}]] VNĐ</div>
+													</div>
+												</div>
+
+											</div>
+											<div class="card-footer">
+												<button type="submit" class="btn btn-primary float-right">Thêm
+													vào giỏ hàng</button>
+											</div>
+										</form>
+										<form hidden id="invoiceCartForm" action="/admin/invoices/addToinvoiceCartVsQR"
+											method="post">
+											<div class="col-md-8">
+												<div class="card-body">
+													<input type="hidden" id="productIdField" name="productId">
+													<input type="hidden" id="quantityField" name="quantity">
+													<input type="hidden" id="sizeIdField" name="sizeId">
+												</div>
+											</div>
+										</form>
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+
+	</div>
+	</div>
+	</div>
+	<footer class="footer">
+		<div class="container-fluid">
+
+			<div class="copyright ml-auto">
+				2022, made with <i class="fa fa-heart heart text-danger"></i> by <a
+					href="javascript:void(0);">OTIS-SHOP</a>
+			</div>
+		</div>
+	</footer>
+	</div>
+	</div>
+	<!-- Core JS Files -->
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+	<!-- jQuery UI -->
+	<script src="/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+	<script src="/assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
+
+	<!-- jQuery Scrollbar -->
+	<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+	<!-- Datatables -->
+	<script src="/assets/js/plugin/datatables/datatables.min.js"></script>
+
+	<!-- Other JavaScript files -->
+	<script src="/vendor/countdown/countdown.min.js"></script>
+	<script src="/vendor/niceselect/nice-select.min.js"></script>
+	<script src="/vendor/slickslider/slick.min.js"></script>
+	<script src="/vendor/venobox/venobox.min.js"></script>
+	<script src="/js/nice-select.js"></script>
+	<script src="/js/countdown.js"></script>
+	<script src="/js/accordion.js"></script>
+	<script src="/js/venobox.js"></script>
+	<script src="/js/slick.js"></script>
+	<script src="/js/main.js"></script>
+	<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+	<script src="https://cdn.rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+
+	<script>
+		let video;
+		let scanner;
+
+		function openCamera() {
+			video = document.getElementById('video');
+			scanner = new Instascan.Scanner({ video: video });
+
+			scanner.addListener('scan', function (content) {
+				// Handle the scanned QR code content here
+				console.log('Scanned QR code content:', content);
+
+				// Thực thi đoạn mã JavaScript sau khi quét QR code thành công
+				executeAfterQRScan(content);
+			});
+
+			Instascan.Camera.getCameras().then(function (cameras) {
+				if (cameras.length > 0) {
+					scanner.start(cameras[0]);
+				} else {
+					console.error('No cameras found.');
+					alert('No cameras found.');
+				}
+			}).catch(function (e) {
+				console.error(e);
+			});
+		}
+
+		
+
+
+		function closeCamera() {
+			if (scanner) {
+				scanner.stop();
+			}
+			if (video.srcObject) {
+				const tracks = video.srcObject.getTracks();
+				tracks.forEach(track => track.stop());
+				video.srcObject = null;
+			}
+		}
+
+		function toggleFullscreen() {
+			if (video.requestFullscreen) {
+				video.requestFullscreen();
+			} else if (video.mozRequestFullScreen) {
+				video.mozRequestFullScreen();
+			} else if (video.webkitRequestFullscreen) {
+				video.webkitRequestFullscreen();
+			} else if (video.msRequestFullscreen) {
+				video.msRequestFullscreen();
+			}
+		}
+		function executeAfterQRScan(content) {
+			// Gọi API để lấy dữ liệu
+			fetch(content)
+				.then(response => response.json())
+				.then(apiData => {
+					// Điền dữ liệu từ API vào các trường của form
+					document.getElementById('productIdField').value = apiData.productId;
+					document.getElementById('quantityField').value = 1;
+					document.getElementById('sizeIdField').value = apiData.size.sizeId;
+
+					// Submit form
+					document.getElementById('invoiceCartForm').submit();
+				})
+				.catch(error => {
+					console.error('Error fetching API data:', error);
+					// Xử lý lỗi nếu cần thiết
+				});
+		}
+
+
+		// Bắt sự kiện khi modal được ẩn
+		$('#cameraModal').on('hidden.bs.modal', function () {
+			closeCamera();
+		});
+
+	</script>
+
+	<!-- 
+	<script th:inline="javascript">
+		$(document).ready(function () {
+			var productIdValue = /*[[${optionPro.productId}]]*/ '';
+			$("#productIdInput").val(productIdValue);
+			var productName = /*[[${optionPro.productName}]]*/ '';
+			$("#productName").val(productName);
+			var unitPrice = /*[[${optionPro.price}]]*/ '';
+			$("#unitPrice").val(unitPrice);
+			
+			$("#quantity").val(1);
+			
+			calculateTotal();
+		});
+	
+		function incrementQuantity() {
+			var quantity = document.getElementById("quantity");
+			quantity.value = parseInt(quantity.value) + 1;
+			calculateTotal();
+		}
+	
+		function decrementQuantity() {
+			var quantity = document.getElementById("quantity");
+			if (parseInt(quantity.value) > 1) {
+				quantity.value = parseInt(quantity.value) - 1;
+				calculateTotal();
+			}
+		}
+	
+		function calculateTotal() {
+			var unitPrice = document.getElementById("unitPrice").value;
+			var quantity = document.getElementById("quantity").value;
+			var totalPrice = unitPrice * quantity;
+	
+			// Cập nhật giá trị trong trường totalPrice
+			document.getElementById("totalPrice").value = totalPrice;
+		}
+	</script> -->
+
+
+	<!-- Your custom script -->
+	<script th:inline="javascript">
+		var totalPrice = /*[[${totalPrice}]]*/ 0;
+		document.getElementById("totalPriceInput").value = totalPrice;
+	</script>
+	<!-- <script>
+		function createNewTab() {
+			tabIndex++;
+			let tabID = "tab" + tabIndex;
+			let tabLink = $('<a class="nav-link" data-toggle="tab" href="#' + tabID + '">Hóa đơn ' + tabIndex +
+				' <span class="close-tab" data-tab-id="' + tabID + '">&times;</span></a>');
+			let tabPane = $('<div class="tab-pane fade" id="' + tabID + '"></div>');
+			tabLink.insertBefore("#addTabBtn");
+			tabPane.appendTo(".tab-content");
+
+			let closeBtn = tabLink.find('.close-tab');
+			closeBtn.on('click', function () {
+				let tabIDtoClose = $(this).data('tab-id');
+				$("#" + tabIDtoClose).remove();
+				tabLink.remove();
+				if ($("#" + tabIDtoClose).hasClass("show")) {
+					let nextTab = tabLink.prev().length ? tabLink.prev() : tabLink.next();
+					nextTab.tab("show");
+				}
+			});
+			tabLink.tab("show");
+			$(".nav-tabs").animate({ scrollLeft: $(".nav-tabs")[0].scrollWidth }, 800);
+		}
+		$(".nav-tabs").on("click", "#tab1-tab .close-tab", function () {
+			$("#tab1").remove();
+			$("#tab1-tab").remove();
+			let nextTab = $("#tab1-tab").prev().length ? $("#tab1-tab").prev() : $("#tab1-tab").next();
+			nextTab.tab("show");
+		});
+	</script>
+	<script>
+		$(document).ready(function () {
+			let tabIndex = 1;
+			function addNewTab() {
+				tabIndex++;
+				let tabID = "tab" + tabIndex;
+				let tabLink = $('<a class="nav-link" data-toggle="tab" href="#' + tabID + '">Hóa đơn ' + tabIndex +
+					' <span class="close-tab" data-tab-id="' + tabID + '">&times;</span></a>');
+				let tabPane = $('<div class="tab-pane fade" id="' + tabID + '"></div>');
+				tabLink.insertBefore("#addTabBtn");
+				tabPane.appendTo(".tab-content");
+				let closeBtn = tabLink.find('.close-tab');
+				closeBtn.on('click', function () {
+					let tabIDtoClose = $(this).data('tab-id');
+					$("#" + tabIDtoClose).remove();
+					tabLink.remove();
+					if ($("#" + tabIDtoClose).hasClass("show")) {
+						let nextTab = tabLink.prev().length ? tabLink.prev() : tabLink.next();
+						nextTab.tab("show");
+					}
+				});
+				let existingContent = $("#yourExistingContentId").html();
+				tabPane.html(existingContent);
+				$(".nav-tabs").animate({ scrollLeft: $(".nav-tabs")[0].scrollWidth }, 800);
+			}
+			$("#addTabBtn").on("click", function () {
+				addNewTab();
+			});
+			$('.nav-link').on('click', function () {
+				$(".nav-link, .tab-pane").removeClass("active show");
+				let tabID = $(this).attr('href').substring(1);
+				$(this).addClass("active show");
+				$("#" + tabID).addClass("active show");
+			});
+			addNewTab();
+		}); -->
+
+
+	</script>
+	<!-- Atlantis JS -->
+	<script src="/assets/js/atlantis.min.js"></script>
+	<!-- Atlantis DEMO methods, don't include it in your project! -->
+	<script src="/assets/js/setting-demo2.js"></script>
+
+
+
+</body>
+
+
+</html>
