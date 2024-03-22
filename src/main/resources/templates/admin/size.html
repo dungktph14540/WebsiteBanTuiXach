@@ -45,7 +45,7 @@
 			<div class="content">
 				<div class="page-inner">
 					<div class="page-header">
-						<h4 class="page-title">Quản lý Màu</h4>
+						<h4 class="page-title">Quản lý Size</h4>
 						<ul class="breadcrumbs">
 							<li class="nav-home">
 								<a href="javascript:void(0);">
@@ -84,7 +84,7 @@
 												<h5 class="modal-title">
 													<span class="fw-mediumbold"
 														style="text-decoration: underline; color: black;">
-														Thêm mới Màu</span>
+														Thêm mới Size</span>
 
 												</h5>
 												<button type="button" class="close" data-dismiss="modal"
@@ -98,7 +98,7 @@
 													<div class="row">
 														<div class="col-sm-12">
 															<div class="form-group form-group-default">
-																<label>Tên Màu</label>
+																<label>Tên Size</label>
 																<input th:field="*{nameSize}" id="nameSize"
 																	onblur="formatTrim();" oninput="checktext();"
 																	type="text" class="form-control"
@@ -128,13 +128,7 @@
 								<div th:if="${successsize}" class="text-center alert alert-success" style="border-left: 24px solid #31ce36;">
 									<p th:text="${successsize}"></p>
 								</div>
-								<div th:if="${errormessagesize}" class="text-center alert alert-danger" style="border-left: 24px solid red;">
-									<p th:text="${errormessagesize}"></p>
-								</div>
-								<div th:if="${successmessagesize}" class="text-center alert alert-success" style="border-left: 24px solid #31ce36;">
-									<p th:text="${successmessagesize}"></p>
-								</div>
-								
+								S
 								</div>
 								<div class="alert alert-success row col-12" th:if="${message}" th:text="${message}">
 								</div>
@@ -162,7 +156,7 @@
 														</a>
 														<button th:data-id="${item.sizeId}"
 															th:data-name="${item.nameSize}"
-															onclick="showConfigModalDialogMau(this.getAttribute('data-id'), this.getAttribute('data-name'))"
+															onclick="showConfigModalDialog(this.getAttribute('data-id'), this.getAttribute('data-name'))"
 															type="button" data-toggle="tooltip" title=""
 															class="btn btn-link btn-danger" data-original-title="Xóa">
 															<i class="fa fa-times"></i>
@@ -188,9 +182,9 @@
 										function formatTrim() {
 											$('#nameSize').val($('#nameSize').val().trim());
 										}
-										function showConfigModalDialogMau(id, name) {
+										function showConfigModalDialog(id, name) {
 											$('#name').text(name);
-											$('#yesOption').attr('href', '/admin/delete-size/' + id);
+											$('#yesOption').attr('href', '/admin/delete/' + id);
 											$('#configmationId').modal('show');
 										}
 									</script>
@@ -207,7 +201,7 @@
 													</button>
 												</div>
 												<div class="modal-body">
-													<p style="color: black">Bạn có muốn xóa màu này không?</p>
+													<p style="color: black">Bạn có muốn xóa thể loại này không?</p>
 												</div>
 												<div class="modal-footer">
 													<a id="yesOption" type="button" class="btn btn-primary">Có</a>

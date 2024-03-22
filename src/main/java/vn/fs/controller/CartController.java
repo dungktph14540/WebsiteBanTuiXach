@@ -87,6 +87,7 @@ public class CartController extends CommomController {
 
 	@GetMapping(value = "/shoppingCart_checkout")
 	public String shoppingCart(Model model) {
+
 		Collection<CartItem> cartItems = shoppingCartService.getCartItems();
 		model.addAttribute("cartItems", cartItems);
 		model.addAttribute("total", shoppingCartService.getAmount());
@@ -95,8 +96,10 @@ public class CartController extends CommomController {
 			double price = cartItem.getQuantity() * cartItem.getProduct().getPrice();
 			totalPrice += price - (price * cartItem.getProduct().getDiscount() / 100);
 		}
+
 		model.addAttribute("totalPrice", totalPrice);
 		model.addAttribute("totalCartItems", shoppingCartService.getCount());
+
 		return "web/shoppingCart_checkout";
 	}
 
@@ -339,7 +342,7 @@ public class CartController extends CommomController {
 		double totalPrice = 0;
 		for (CartItem cartItem : cartItems) {
 			double price = cartItem.getQuantity() * cartItem.getProduct().getPrice();
-			totalPrice += price - (price * cartItem.getProduct().getDiscount() / 100) + 20000;
+			totalPrice += price - (price * cartItem.getProduct().getDiscount() / 100) + 30000;
 		}
 		model.addAttribute("totalPrice", totalPrice);
 		model.addAttribute("totalCartItems", shoppingCartService.getCount());
@@ -369,7 +372,7 @@ public class CartController extends CommomController {
 				}
 
 				// sendMail
-				commomDataService.sendSimpleEmailpay(user.getEmail(), "Ado-Shop Xác Nhận Đơn hàng", "aaaa", cartItems,
+				commomDataService.sendSimpleEmail(user.getEmail(), "Ado-Shop Xác Nhận Đơn hàng", "aaaa", cartItems,
 						totalPrice, orderFinal);
 
 				shoppingCartService.clear();

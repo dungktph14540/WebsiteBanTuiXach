@@ -15,8 +15,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,8 +32,6 @@ public class Order implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long orderId;
 	@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern = "HH:mm dd/MM/yyyy")
-	private Date yourDateField;
 	private Date orderDate;
 	private Double amount;
 	private String address;

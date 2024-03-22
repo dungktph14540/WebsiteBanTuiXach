@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta charset="UTF-8" />
-	<title>ADO - Trang quản trị</title>
+	<title>Otis - Trang quản trị</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon" />
 
@@ -68,15 +68,14 @@
 					</div>
 					<div class="col-md-12">
 						<div class="card">
-							<!--<div class="card-header">
+							<div class="card-header">
 								<div class="d-flex align-items-center">
-									<button class="btn btn-primary btn-round ml-auto" data-toggle="modal"
-										data-target="#cameraModal" onclick="openCamera()">
+									<button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#cameraModal" onclick="openCamera()">
 										<i class="bi bi-qr-code-scan"></i>
 										Quét QR
 									</button>
 								</div>
-							</div>-->
+							</div>
 							<div class="card-body">
 								<div class="modal fade" id="cameraModal" tabindex="-1" role="dialog" aria-labelledby="cameraModalLabel" aria-hidden="true">
 									<div class="modal-dialog" role="document">
@@ -126,11 +125,11 @@
 
 									<tbody>
 										<tr th:each="item : ${lsinvoice}">
-											<td>[[${item.invoiceId}]]</td>
+											<td id="idInvoice">[[${item.invoiceId}]]</td>
 											<td>[[${item.username}]]</td>
 											<td>[[${item.phonenumber}]]</td>
-											<td th:text="${#dates.format(item.invoiceDate, 'HH:mm dd/MM/yyyy')}"></td>
-											<td th:text="${#numbers.formatDecimal(item.amount, 1, 'DEFAULT', 0, 'DEFAULT')} + ' đ'"></td>
+											<td>[[${item.invoiceDate}]]</td>
+											<td>[[${item.amount}]]</td>
 											<td><a
 													th:href="@{/admin/invoices/detail/{invoiceId}(invoiceId=${item.invoiceId})}">Hóa
 													đơn chi tiết</a></td>
@@ -203,10 +202,6 @@
 														class="btn btn-link btn-danger" data-original-title="Xóa">
 														<i class="fa fa-times"></i>
 													</button>
-													<a th:if="${item.status==1}" type="button" class="btn btn-link btn-primary btn-lg" 
-													th:href="@{/admin/export/pdf/{invoiceId}(invoiceId=${item.invoiceId})}">In hóa đơn</a>
-													<!--<a th:if="${item.status==1}" type="button" class="btn btn-link btn-primary btn-lg" 
-													th:href="@{/admin/genarate/{invoiceId}(invoiceId=${item.invoiceId})}">In hóa đơn2</a>-->
 												</div>
 											</td>
 										</tr>
@@ -267,7 +262,7 @@
 			<div class="container-fluid">
 
 				<div class="copyright ml-auto">
-					2023, made with <i class="fa fa-heart heart text-danger"></i> by <a href="">ADO-SHOP</a>
+					2022, made with <i class="fa fa-heart heart text-danger"></i> by <a href="">OTIS-SHOP</a>
 				</div>
 			</div>
 		</footer>
@@ -295,7 +290,9 @@
   <!-- Thêm Bootstrap JS và Popper.js (đối với Bootstrap 4) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-
+  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+  <script src="https://cdn.rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+ <script src="/assets/js/qrCode.js"></script>
 	<script>
 		$(document).ready(function () {
 			$('#basic-datatables').DataTable({
@@ -382,50 +379,7 @@
 
 
 	</script>
-	 <script>
-        let video;
-
-        function openCamera() {
-            video = document.getElementById('video');
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(function (stream) {
-                        video.srcObject = stream;
-                    })
-                    .catch(function (error) {
-                        console.error('Error accessing camera:', error);
-                    });
-            } else {
-                alert('Your browser does not support getUserMedia');
-            }
-        }
-
-        function closeCamera() {
-            // Dừng video và giải phóng tài nguyên camera
-            if (video.srcObject) {
-                const tracks = video.srcObject.getTracks();
-                tracks.forEach(track => track.stop());
-                video.srcObject = null;
-            }
-        }
-
-        function toggleFullscreen() {
-            if (video.requestFullscreen) {
-                video.requestFullscreen();
-            } else if (video.mozRequestFullScreen) { /* Firefox */
-                video.mozRequestFullScreen();
-            } else if (video.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-                video.webkitRequestFullscreen();
-            } else if (video.msRequestFullscreen) { /* IE/Edge */
-                video.msRequestFullscreen();
-            }
-        }
-
-        // Bắt sự kiện khi modal được ẩn
-        $('#cameraModal').on('hidden.bs.modal', function () {
-            closeCamera(); // Tự động đóng camera khi modal ẩn
-        });
-    </script>
+	
 </body>
 
 </html>

@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta charset="UTF-8" />
-	<title>ADO - Trang quản trị</title>
+	<title>Otis - Trang quản trị</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon" />
 
@@ -76,46 +76,37 @@
 							<div class="card-header">
 								<section class="row">
 									<div class="col-6 offset-3 mt-4">
-										<form th:action="@{/admin/orderdetail/UpdateOrderDetail}" method="post"
-											modelAttribute="orderdetail">
+										<form th:action="@{/admin/orderdetail/addOrderDetail}" method="post" th:object="${orderDetails}">
 											<div class="modal-body">
 												<div class="form-group">
 													<label>Mã đơn hàng chi tiết</label>
-													<input type="text" class="form-control" name="orderDetailId" th:value="*{orderDetails.orderDetailId}"
-														readonly>
+													<input type="text" class="form-control" th:field="*{orderDetailId}"
+														required>
 												</div>
 												<div class="form-group">
 													<label>Mã đơn hàng</label>
-													<input type="text" class="form-control" name="order" th:value="*{orderId}"
-													readonly>
+													<input type="text" class="form-control" th:field="*{order}"
+														required>
 												</div>
 												<div class="form-group">
 													<label>Lựa chọn sản phẩm</label>
-													<!-- <select name="product" class="form-control"
+													<select th:field="*{product}" class="form-control"
 														id="productSelect">
-														<option th:value="*{orderDetails.product.productId}" th:text="${orderDetails.product.productName}"></option>
+														<option value="">-- Chọn sản phẩm --</option>
 														<option th:each="item : ${cboPro}"
 															th:value="${item.productId}"
 															th:text="${item.productName}"
 															th:data-price="${item.price}"></option>
-													</select> -->
-													<input type="text" class="form-control" th:value="*{productName}" readonly/>
-													<input type="hidden" class="form-control" name="product" th:value="*{productId}">
-
+													</select>
 												</div>
 												<div class="form-group">
 													<label>Đơn giá</label>
-													<input name="price" th:value="*{orderDetails.price}" type="text"
+													<input th:field="*{price}" type="text"
 														class="form-control" id="priceInput" readonly>
 												</div>
 												<div class="form-group">
 													<label>Số lượng</label>
-													<input name="quantity" th:value="*{orderDetails.quantity}" type="number"
-														class="form-control" value="1" oninput="checkMaxValue(this)">
-													<input id="badgeId" class="badge text-white bg-info"
-														style="padding: 8px 10px 5px 10px; margin: 0 0 0 0px;">
-													<input type="hidden" id="quantitymax"
-														th:value="*{orderDetails.product.quantity}">
+													<input th:field="*{quantity}" type="number" class="form-control" value="1">
 												</div>
 
 											</div>
@@ -149,47 +140,12 @@
 					$('#yesOption').attr('href', '/admin/delete/' + id);
 					$('#configmationId').modal('show');
 				}
-				function getSL() {
-					var a = $('#quantityInputput').val().trim();
-					var b = $('#productQuatity').val().trim();
-					var button = document.getElementById('addtocart');
-					if (parseInt(a) > parseInt(b)) {
-						$('#quantityInputput').val($('#productQuatity').val().trim());
-					}
-					if (parseInt(a) < 1) {
-						button.classList.add('disabled');
-					}
-					else {
-						button.classList.remove('disabled');
-					}
-					if ($('#quantityInputput').val().trim() == "") {
-						button.classList.add('disabled');
-					}
-					else {
-						button.classList.remove('disabled');
-					}
-
-				}
-
-			</script>
-			<script>
-				function checkMaxValue(inputElement) {
-					var minValue = 1;
-					var maxValue = document.getElementById('quantitymax').value; // Corrected line
-					var currentValue = parseInt(inputElement.value);
-
-					if (currentValue < minValue) {
-						inputElement.value = minValue;
-					} else if (currentValue > maxValue) {
-						inputElement.value = maxValue;
-					}
-				}
 			</script>
 			<footer class="footer">
 				<div class="container-fluid">
 
 					<div class="copyright ml-auto">
-						2023, made with <i class="fa fa-heart heart text-danger"></i> by <a href="">ADO</a>
+						2022, made with <i class="fa fa-heart heart text-danger"></i> by <a href="">OTIS</a>
 					</div>
 				</div>
 			</footer>
@@ -217,7 +173,7 @@
 	<!--Get price by product-->
 	<script>
 		$(document).ready(function () {
-			$("#productSelectInput").change(function () {
+			$("#productSelect").change(function () {
 				var selectedProductId = $(this).val();
 				$.get('/admin/getProductPrice/' + selectedProductId, function (data) {
 					if (data != null) {
@@ -229,27 +185,6 @@
 			});
 		});
 
-	</script>
-	<script>
-		$(document).ready(function () {
-			$("#productSelectInput").change(function () {
-				var selectedProductId = $(this).val();
-				var urlImg = "/loadImage?imageName=";
-				$.get('/admin/getProductCBOOO/' + selectedProductId, function (data) {
-					if (data != null) {
-						$("#priceInput").val(data.price);
-						$("#colorInput").val(data.description);
-						$("#quantityInputput").val(1);
-
-						var imageName = data.productImage;
-						var urlImgFull = urlImg + imageName;
-						$("#imageElement").attr("src", urlImgFull);
-					} else {
-						alert("Sản phẩm không tồn tại hoặc có lỗi.");
-					}
-				});
-			});
-		});
 	</script>
 	<script>
 		$(document).ready(function () {

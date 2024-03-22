@@ -107,8 +107,8 @@
 						<div class="row">
 							<div class="col-md-2">Số lượng:</div>
 							<div class="col-md-3">
-								<input type="number" id="quantity"  th:max="${product.quantity}"
-									oninput="checktext();getSL();LamTron();" class="form-control" 
+								<input type="number" id="quantity" min="1" th:max="${product.quantity}"
+									oninput="checktext();getSL();LamTron();" class="form-control" value="1"
 									style="width: 80%; height: 25px; border-radius: 6px; padding: 0px 20px 0px; color: var(- -text); background: var(- -chalk); border: 1px solid var(- -border);">
 							</div>
 							<div class="col-md-2">
@@ -120,8 +120,8 @@
 
 						<div class="btn-toolbar mb-3 mt-3" role="toolbar" aria-label="Toolbar with button groups">
 							<div class="btn-group me-2" role="group" aria-label="First group">
-								<a type="button" class="btn btn-outline-secondary" id="btnSizeS" onclick="selectSize('1')">Đen</a>
-								<a type="button" class="btn btn-outline-secondary" id="btnSizeM" onclick="selectSize('2')">Nâu</a>
+								<a type="button" class="btn btn-outline-secondary" id="btnSizeS" onclick="selectSize('1')">S</a>
+								<a type="button" class="btn btn-outline-secondary" id="btnSizeM" onclick="selectSize('2')">M</a>
 								<a type="button" class="btn btn-outline-secondary" id="btnSizeL" onclick="selectSize('3')">L</a>
 								<a type="button" class="btn btn-outline-secondary" id="btnSizeXL" onclick="selectSize('4')">XL</a>
 							</div>
@@ -181,7 +181,6 @@
 			if ($('#quantity').val().trim() == "") {
 				$('#quantity').val(1);
 			}
-			
 		}
 		function checktext() {
 			debugger;

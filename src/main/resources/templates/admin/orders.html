@@ -65,14 +65,14 @@
 					</div>
 					<div class="col-md-12">
 						<div class="card">
-							<!--<div class="card-header">
+							<div class="card-header">
 								<div class="d-flex align-items-center">
 									<a th:href="@{/admin/export}" style="padding-left: 20px;">
 										<h4 class="card-title" style="text-decoration: underline; color: green;">Xuất
 											file Excel</h4>
 									</a>
 								</div>
-							</div>-->
+							</div>
 							<div class="alert alert-success row col-12" th:if="${message}" th:text="${message}"></div>
 							<div class="card-body">
 								<div class="table-responsive">
@@ -88,24 +88,24 @@
 												<th>Tổng tiền đơn hàng</th>
 												<th>Loại ship</th>
 												<th>Phí ship</th>
-												\ <th>Chi tiết đơn hàng</th>
+\												<th>Chi tiết đơn hàng</th>
 												<th style="width: 10%">Hành động</th>
 											</tr>
 										</thead>
-
+										
 										<tbody>
 											<tr th:each="item : ${orderDetails}">
 												<td>[[${item.orderId}]]</td>
 												<td>[[${item.user.userId}]]</td>
 												<td>[[${item.user.name}]]</td>
 												<td>[[${item.phone}]]</td>
-												<td th:text="${#dates.format(item.orderDate, 'HH:mm dd/MM/yyyy')}"></td>
+												<td>[[${item.orderDate}]]</td>
 												<td>[[${item.address}]]</td>
 												<td
 													th:text="${#numbers.formatDecimal(item.amount, 1, 'DEFAULT', 0, 'DEFAULT')}+' đ'">
 												</td>
 												<td>[[${item.loaiShip}]]</td>
-												<td th:text="${#numbers.formatDecimal(item.priceShip, 1, 'DEFAULT', 0, 'DEFAULT')} + ' đ'"></td>
+												<td>[[${item.priceShip}]]đ</td>
 												<td><a th:href="@{'/admin/order/detail/'+${item.orderId}}"> <i
 															class="fa fa-info-circle"> Chi tiết đơn hàng</i>
 													</a></td>
@@ -130,10 +130,6 @@
 															onclick="showConfigDeliveredModalDialog(this.getAttribute('data-id'))">
 															<i class="fa fa-check-circle">Đang gói hàng</i>
 														</a>
-														<a style="cursor: pointer;" th:data-id="${item.orderId}"
-															onclick="showConfigCancelModalDialog(this.getAttribute('data-id'))">
-															<i class="fas fa-trash-alt text-danger"> Hủy đơn</i>
-														</a>
 													</div>
 													<div th:if="${item.status==2}">
 														<a style="cursor: pointer; color: #ffab10;"
@@ -141,20 +137,16 @@
 															onclick="showConfigConfirmModalDialogDgh(this.getAttribute('data-id'))">
 															<i class="fa fa-check-circle">Chờ vận chuyển</i>
 														</a>
-														<a style="cursor: pointer;" th:data-id="${item.orderId}"
-															onclick="showConfigCancelModalDialog(this.getAttribute('data-id'))">
-															<i class="fas fa-trash-alt text-danger"> Hủy đơn</i>
-														</a>
 													</div>
 
 													<div th:if="${item.status==3}">
-														<a style="cursor:pointer; color: rgb(255, 128, 64);"
+														<a style="cursor:pointer; color: rgb(255, 128, 64);" 
 															th:data-id="${item.orderId}"
 															onclick="showConfigConfirmModalDialogDGiao(this.getAttribute('data-id'))">
 															<i class="fa fa-check-circle"> Đang giao hàng</i>
 														</a>
 													</div>
-
+													
 													<div th:if="${item.status==4}"
 														style="cursor:pointer; color: #119744;">
 														<i class="fa fa-check-circle"> Đã giao hàng</i>
@@ -162,19 +154,15 @@
 													<div th:if="${item.status==5}"
 														style="cursor:pointer; color: #ff3838;">
 														<i class="fas fa-ban"> Đã huỷ</i>
-														<p class="fa " style="cursor:pointr; color: #ff3838;">
-															Lý do:<a>[[${item.lyDo}]]</a></p>
 													</div>
 													<div th:if="${item.status==6}"
-														style="cursor:pointer; color: #119744;"
-														th:data-id="${item.orderId}"
-														onclick="showConfigConfirmPaypalModalDialog(this.getAttribute('data-id'))">
+														style="cursor:pointer; color: #119744;" 
+														th:data-id="${item.orderId}" onclick="showConfigConfirmPaypalModalDialog(this.getAttribute('data-id'))">
 														<i class="fa fa-check-circle"> Đã thanh toán</i>
 													</div>
 													<div th:if="${item.status==7}"
 														style="cursor:pointer; color: #ffab10;"
-														th:data-id="${item.orderId}"
-														onclick="showConfigDeliveredPaypalModalDialog(this.getAttribute('data-id'))">
+														th:data-id="${item.orderId}" onclick="showConfigDeliveredPaypalModalDialog(this.getAttribute('data-id'))">
 														<i class="fa fa-check-circle"> Đang gói hàng</i>
 													</div>
 													<div th:if="${item.status==8}">
@@ -185,9 +173,8 @@
 														</a>
 													</div>
 													<div th:if="${item.status==9}"
-														style="cursor:pointer; color: #ffab10;"
-														th:data-id="${item.orderId}"
-														onclick="showConfigConfirmModalDialogDghpp(this.getAttribute('data-id'))">
+														style="cursor:pointer; color: #ffab10;" 
+														th:data-id="${item.orderId}" onclick="showConfigConfirmModalDialogDghpp(this.getAttribute('data-id'))">
 														<i class="fa fa-check-circle"> Đang giao hàng</i>
 													</div>
 													<div th:if="${item.status==10}"
@@ -225,7 +212,8 @@
 												</div>
 												<div class="modal-body">
 													<p>
-														Bạn có muốn giao đơn hàng có mã "<span id="idConfirmpp"></span>"
+														Bạn có muốn giao đơn hàng có mã "<span
+															id="idConfirmpp"></span>"
 														?
 													</p>
 												</div>
@@ -237,8 +225,8 @@
 											</div>
 										</div>
 									</div>
-
-
+									
+									
 									<!-- Xác nhận đơn -->
 									<script>
 										function showConfigConfirmModalDialog(
@@ -312,8 +300,7 @@
 													</p>
 												</div>
 												<div class="modal-footer">
-													<a id="yesOptionConfirmGiao" type="button"
-														class="btn btn-info">Có</a>
+													<a id="yesOptionConfirmGiao" type="button" class="btn btn-info">Có</a>
 													<button type="button" class="btn btn-danger"
 														data-dismiss="modal">Không</button>
 												</div>
@@ -353,17 +340,16 @@
 													</p>
 												</div>
 												<div class="modal-footer">
-													<a id="yesOptionConfirmGiaopp" type="button"
-														class="btn btn-info">Có</a>
+													<a id="yesOptionConfirmGiaopp" type="button" class="btn btn-info">Có</a>
 													<button type="button" class="btn btn-danger"
 														data-dismiss="modal">Không</button>
 												</div>
 											</div>
 										</div>
 									</div>
-
-
-
+									
+									
+									
 									<script>
 										function showConfigConfirmModalDialogDgh(
 											id) {
@@ -396,8 +382,7 @@
 													</p>
 												</div>
 												<div class="modal-footer">
-													<a id="yesOptionConfirmDgh" type="button"
-														class="btn btn-info">Có</a>
+													<a id="yesOptionConfirmDgh" type="button" class="btn btn-info">Có</a>
 													<button type="button" class="btn btn-danger"
 														data-dismiss="modal">Không</button>
 												</div>
@@ -436,8 +421,7 @@
 													</p>
 												</div>
 												<div class="modal-footer">
-													<a id="yesOptionConfirmDghpp" type="button"
-														class="btn btn-info">Có</a>
+													<a id="yesOptionConfirmDghpp" type="button" class="btn btn-info">Có</a>
 													<button type="button" class="btn btn-danger"
 														data-dismiss="modal">Không</button>
 												</div>
@@ -557,8 +541,7 @@
 													</p>
 												</div>
 												<div class="modal-footer">
-													<a id="yesOptionDeliveredpp" type="button"
-														class="btn btn-info">Có</a>
+													<a id="yesOptionDeliveredpp" type="button" class="btn btn-info">Có</a>
 													<button type="button" class="btn btn-danger"
 														data-dismiss="modal">Không</button>
 												</div>
@@ -613,16 +596,15 @@
 			</div>
 			<footer class="footer">
 				<div class="container-fluid">
-
+					
 					<div class="copyright ml-auto">
-						2023, made with <i class="fa fa-heart heart text-danger"></i> by <a
-							href="javascript:void(0);">ADO-SHOP</a>
+						2023, made with <i class="fa fa-heart heart text-danger"></i> by <a href="javascript:void(0);">ADO-SHOP</a>
 					</div>
 				</div>
 			</footer>
 		</div>
 
-
+		
 	</div>
 	<!--   Core JS Files   -->
 	<script src="/assets/js/core/jquery.3.2.1.min.js"></script>

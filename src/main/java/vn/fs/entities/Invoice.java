@@ -18,16 +18,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@SuppressWarnings("serial")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
+
 @Entity
 @Table(name = "invoice")
 public class Invoice implements Serializable {
@@ -41,9 +35,6 @@ public class Invoice implements Serializable {
 	private String phonenumber;
 
 	@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern = "HH:mm dd/MM/yyyy")
-	private Date yourDateField;
-
 	private Date invoiceDate;
 
 	private double amount;

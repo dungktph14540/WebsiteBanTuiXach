@@ -17,9 +17,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @SuppressWarnings("serial")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
+
 @Entity
 @Table(name = "invoice_detail")
 public class InvoiceDetail implements Serializable{

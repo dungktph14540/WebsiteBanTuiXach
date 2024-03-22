@@ -19,6 +19,12 @@ public interface ShoppingCartService {
 	void clear();
 
 	Collection<CartItem> getCartItems();
+	Collection<InvoiceCart> getInvoiceCarts();
+	
+	InvoiceCart updateInvoice(Long id, int quantity1);
+	
+	void removeCartInvoice(InvoiceCart item);
+
 
 	void remove(CartItem item);
 
@@ -42,13 +48,9 @@ public interface ShoppingCartService {
 	void getId(CartItem item);
 
 	void add3(InvoiceCart item, Product product);
+
 	void clearInvoice();
 
-	Collection<InvoiceCart> getInvoiceCarts();
-
-	InvoiceCart updateInvoice(Long id, int quantity1);
-
-	void removeCartInvoice(InvoiceCart item);
 
 
 }

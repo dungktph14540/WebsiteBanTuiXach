@@ -66,20 +66,6 @@
                     </div>
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="col-md-12">
-                                <div th:if="${erroradd}" class="text-center alert alert-danger"
-                                    style="border-left: 24px solid red;">
-                                    <p th:text="${erroradd}"></p>
-                                </div>
-                                <div th:if="${errors}" class="text-center alert alert-danger"
-                                    style="border-left: 24px solid red;">
-                                    <p th:text="${errors}"></p>
-                                </div>
-                                <div th:if="${successadd}" class="text-center alert alert-success"
-                                    style="border-left: 24px solid #31ce36;">
-                                    <p th:text="${successadd}"></p>
-                                </div>
-                            </div>
                             <div class="card-header">
                                 <div class="d-flex align-items-center">
                                     <button th:if="${status==0}" class="btn btn-primary btn-round ml-auto"
@@ -149,7 +135,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label>Số lượng</label>
-                                                            <input th:field="*{quantity}" id="quantityInput"  oninput="checkMaxValue(this)"
+                                                            <input th:field="*{quantity}" id="quantityInput"
                                                                 type="number" class="form-control" min="1" value="1">
                                                         </div>
                                                     </div>
@@ -195,15 +181,13 @@
                                             <th>Đơn giá</th>
                                             <th>Tổng tiền</th>
                                             <th>Tình trạng</th>
-                                            <th style="width: 10%" th:if="${statusInvoice==0}">Action</th>
+                                            <th style="width: 10%">Action</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        <tr th:each="item, count : ${lsDetailInvoice}" th:id="'row_'+${count.index + 1}"
-                                            style="margin-top: 10px;">
+                                        <tr th:each="item, count : ${lsDetailInvoice}" style="margin-top: 10px;">
                                             <td class="text-center" th:text="${count.index+1}"></td>
-                                            <td id="idproductGio" hidden>[[${item.invoiceDetailId}]]</td>
                                             <td>[[${item.invoice.invoiceId}]]</td>
                                             <td>
                                                 <img th:src="@{'/loadImage?imageName='+${item.products.productImage}}"
@@ -211,11 +195,7 @@
                                             </td>
                                             <td>[[${item.products.productName}]]</td>
                                             <td>[[${item.invoice.invoiceDate}]]</td>
-                                            <td class="table-quantity" style="width: 15%;">
-                                                <input type="number" id="quantity" class="form-control"
-                                                    oninput="updateInvoi(this);"onchange="updateInvoi(this);" onblur="updateInvoi(this);"
-                                                    onclick="updateInvoi(this);" th:value="${item.quantity}" required>
-                                            </td>
+                                            <td>[[${item.quantity}]]</td>
                                             <td>[[${#numbers.formatDecimal(item.price - (item.price *
                                                 item.products.discount/100), 1, 'DEFAULT', 0, 'DEFAULT')}+ ' đ']]
                                             </td>
@@ -279,14 +259,8 @@
                                                 </div>
                                             </td>
 
-                                            <td  th:if="${statusInvoice==0}">
-                                                <a  th:if="${item.invoice.status == 0}" class="view" th:id="'submitInvoice'+${count.index + 1}"
-                                                    title="Cập nhật">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
-                                                <input type="text" id="quanPro" th:value="${item.products.quantity}"
-                                                    hidden="hidden">
-                                                <a th:if="${item.invoice.status == 0}" class="trash" href="javascript:void(0);" title="Xóa sản phẩm"
+                                            <td>
+                                                <a class="trash" href="javascript:void(0);" title="Xóa sản phẩm"
                                                     th:data-id="${item.invoiceDetailId}"
                                                     th:data-name="${item.products.productId}"
                                                     onclick="showModelDelete(this.getAttribute('data-id'), this.getAttribute('data-name'))">
@@ -349,13 +323,7 @@
                                                     Cập nhật</button>
                                             </td>
                                         </tr>
-                                        <!-- <tr>
-                                            <td colspan="2">QR đơn hàng</td>
-                                            <td>
-                                                <div th:attr="data-qr-url=@{'/admin/invoices/detail/' + ${invoiceId}}">
-                                                </div>
-                                            </td>
-                                        </tr> -->
+                                      
                                         <script>
                                             function showConfigDeliveredModalDialog(
                                                 id) {
@@ -500,35 +468,8 @@
                 });
             });
         });
-
     </script>
-    <script>
-        function updateInvoi(x) {
-            var y = x.closest('tr').rowIndex;
-            console.log(y);
 
-            var b = $('#row_' + y + ' #quantity').val().trim();
-            var a = $('#row_' + y + ' #idproductGio').text().trim();
-            var numberOfCharacters = a.length;
-            console.log("Số ký tự của a: " + numberOfCharacters);
-            var digitsToCut = Math.floor(numberOfCharacters / 2);
-            var c = $('#row_' + y + ' #quanPro').val().trim();
-
-            if (parseInt(b) > parseInt(c)) {
-                $('#row_' + y + ' #quantity').val($('#row_' + y + ' #quanPro').val());
-                $('#submitInvoice' + y).attr('href', '/admin/invoideDetails/updateQuantity/' + a + '/' + b);
-            } else if (parseInt(b) < 1) {
-                $('#row_' + y + ' #quantity').val(1);
-                $('#submitInvoice' + y).attr('href', '/admin/invoideDetails/updateQuantity/' + a + '/' + 1);
-            } else {
-                $('#submitInvoice' + y).attr('href', '/admin/invoideDetails/updateQuantity/' + a + '/' + b);
-            }
-            console.log(c);
-            console.log(a);
-            console.log(b);
-        }
-
-    </script>
 
 
     <script>
@@ -539,9 +480,8 @@
                 $.get('/admin/getProductCBO/' + selectedProductId, function (data) {
                     if (data != null) {
                         $("#priceInput").val(data.price);
-                        $("#colorInput").val(data.size.nameSize);
+                        $("#colorInput").val(data.description);
                         $("#quantityInput").val(1);
-						$("#quantityInput").attr("max", data.quantity);
 
                         var imageName = data.productImage;
                         var urlImgFull = urlImg + imageName;
@@ -552,17 +492,6 @@
                 });
             });
         });
-        function checkMaxValue(inputElement) {
-			var minValue = 1;
-			var maxValue = parseInt(inputElement.getAttribute('max'));
-			var currentValue = parseInt(inputElement.value);
-	
-			if (currentValue < minValue) {
-				inputElement.value = minValue;
-			} else if (currentValue > maxValue) {
-				inputElement.value = maxValue;
-			}
-		}
     </script>
     <script>
         $(document).ready(function () {
