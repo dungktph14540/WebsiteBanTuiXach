@@ -13,17 +13,21 @@ import vn.fs.entities.User;
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
 
-	@Query(value = "select * from order_details where order_id = ?;", nativeQuery = true)
+	@Query(value = "select MIN(order_detail_id) as order_detail_id,MIN(price)as price,MIN(order_id) as order_id,SUM(quantity) as quantity,product_id\n"
+			+ "from order_details where order_id = ? group by product_id;", nativeQuery = true)
 	List<OrderDetail> findByOrderId(Long id);
 	@Query(value = "select * from user where user_id = ?1", nativeQuery = true)
 	List<User> findByUserId(Long id);
 	// Statistics by product sold
-    @Query(value = "SELECT p.product_name,\n"
-    		+ "    SUM(o.quantity+iv.quantity) as quantity,\n"
-    		+ "    Sum((o.quantity * o.price)+(iv.quantity*iv.price)) as totalPrice \n"
-    		+ "    from products p inner join order_details o on o.product_id = p.product_id \n"
-    		+ "    inner join invoice_detail iv on iv.product_id = p.product_id \n"
-    		+ "    GROUP BY p.product_name;", nativeQuery = true)
+    @Query(value = "SELECT p.product_name , \r\n"
+    		+ "SUM(o.quantity) as quantity ,\r\n"
+    		+ "SUM(o.quantity * o.price) as sum,\r\n"
+    		+ "AVG(o.price) as avg,\r\n"
+    		+ "Min(o.price) as min, \r\n"
+    		+ "max(o.price) as max\r\n"
+    		+ "FROM order_details o\r\n"
+    		+ "INNER JOIN products p ON o.product_id = p.product_id\r\n"
+    		+ "GROUP BY p.product_name;", nativeQuery = true)
     public List<Object[]> repo();
     
     // Statistics by category sold

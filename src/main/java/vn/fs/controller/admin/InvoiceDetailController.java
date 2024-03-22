@@ -1,8 +1,13 @@
 package vn.fs.controller.admin;
 
+import java.io.IOException;
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +16,18 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+
 
 import vn.fs.commom.CommomDataService;
 import vn.fs.entities.Invoice;
 import vn.fs.entities.InvoiceDetail;
 import vn.fs.entities.Order;
+import vn.fs.entities.Product;
 import vn.fs.entities.User;
 import vn.fs.repository.InvoiceDetailRepository;
 import vn.fs.repository.InvoiceRepository;
@@ -71,14 +80,54 @@ public class InvoiceDetailController {
 	public String addInvoiceDetail(@ModelAttribute("invoiceDetails") InvoiceDetail invoiceDetails, ModelMap model,
 			RedirectAttributes attributes) {
 		Long idInvoice = invoiceDetails.getInvoice().getInvoiceId();
+		boolean productExists = false;
 		try {
-			invoiceDetailRepository.save(invoiceDetails);
+			List<InvoiceDetail> details = invoiceDetailRepository.findByInvoiceDeTailByInvoiceId(idInvoice);
+			for (InvoiceDetail inDetail : details) {
+				if (inDetail.getProducts().equals(invoiceDetails.getProducts())) {
+					int quantityDetail =  invoiceDetails.getQuantity()*2;
+					Long idProd = invoiceDetails.getProducts().getProductId();
+					Product product = productRepository.findById(idProd).get();
+					if (quantityDetail > product.getQuantity()) {
+						inDetail.setQuantity(product.getQuantity());
+						productExists = true;
+						break;
+					} else {
+						inDetail.setQuantity(inDetail.getQuantity() + invoiceDetails.getQuantity());
+						productExists = true;
+						break;
+					}
+				}
+			}
+			if (!productExists) {
+				details.add(invoiceDetails);
+			}
+			invoiceDetailRepository.saveAll(details);
 			attributes.addFlashAttribute("successadd", "Thêm sản phâm thành công");
 			System.out.println("acdckajs" + invoiceDetails.getInvoiceDetailId());
 			return "redirect:/admin/invoices/detail/" + idInvoice;
 		} catch (Exception e) {
 			attributes.addFlashAttribute("erroradd", "Thêm sản phâm thất bại");
 			return "redirect:/admin/invoices/detail/" + idInvoice;
+		}
+	}
+	@GetMapping("/invoideDetails/updateQuantity/{id}/{quantity}")
+	public String updateInvoice(@PathVariable("id") Long id, @PathVariable("quantity") Integer quantity,
+			ModelMap model,RedirectAttributes attributes) {
+		try {
+			InvoiceDetail invoiceDetail = invoiceDetailRepository.findById(id).orElse(null);
+			Long idInvoce = invoiceDetail.getInvoice().getInvoiceId();
+			if (invoiceDetail != null) {
+				invoiceDetail.setQuantity(quantity);
+				invoiceDetailRepository.save(invoiceDetail);
+				attributes.addFlashAttribute("successadd", "Đã cập nhật số lượng thành công");
+			} 
+			return "redirect:/admin/invoices/detail/" + idInvoce;
+		} catch (Exception e) {
+			e.printStackTrace();
+			attributes.addFlashAttribute("erroradd", "Cập nhật thất bại");
+
+			return "redirect:/admin/invoices/lsInvoice";
 		}
 	}
 	@PostMapping("/invoiceDetails/updatePriceForInvoice")
@@ -100,5 +149,5 @@ public class InvoiceDetailController {
 		}
 		return "redirect:/admin/invoices/lsInvoice";
 	}
-
+	
 }

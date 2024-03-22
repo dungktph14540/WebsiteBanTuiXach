@@ -1,8 +1,10 @@
 package vn.fs.controller.admin;
 import java.security.Principal;
+import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -62,6 +64,7 @@ public class OrderDetailController {
 	@Autowired
 	UserRepository userRepository;
 	public Order orderFinal = new Order();
+	NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
 	@ModelAttribute(value = "user")
 	public User user(Model model, Principal principal, User user) {
 
@@ -78,20 +81,45 @@ public class OrderDetailController {
 		OrderDetail orderDetail = orderDetailRepository.findById(id).orElse(null);
 		List<Product> cboPro = productRepository.findAll();
 		model.addAttribute("orderDetails",orderDetail);
+		model.addAttribute("productId", orderDetail.getProduct().getProductId());
+		model.addAttribute("productName", orderDetail.getProduct().getProductName());
+		model.addAttribute("orderId",orderDetail.getOrder().getOrderId());
 		model.addAttribute("cboPro",cboPro);
 		return "admin/editOrderDetail";
 	}
 	@PostMapping("/orderdetail/addOrderDetail")
-	public String addOrDetail(@Validated @ModelAttribute("orderdetail") OrderDetail orderDetail,ModelMap model,RedirectAttributes attributes) {
+	public String addOrDetail(@Validated @ModelAttribute("orderdetail") OrderDetail orderDetail, ModelMap model,
+			RedirectAttributes attributes) {
 		try {
 			Long idOrder = orderDetail.getOrder().getOrderId();
-			orderDetailRepository.save(orderDetail);
+			boolean productExists = false;
+			List<OrderDetail> details = orderDetailRepository.findByOrderId(idOrder);
+			for (OrderDetail orde : details) {
+				if (orderDetail.getProduct().equals(orde.getProduct())) {
+					int quantityDetail = orderDetail.getQuantity() * 2;
+					Long idProd = orderDetail.getProduct().getProductId();
+					Product product = productRepository.findById(idProd).get();
+					if (quantityDetail > product.getQuantity()) {
+						orde.setQuantity(product.getQuantity());
+						productExists = true;
+						break;
+					} else {
+						orde.setQuantity(orderDetail.getQuantity() + orde.getQuantity());
+						productExists = true;
+						break;
+					}
+				}
+			}
+			if (!productExists) {
+				details.add(orderDetail);
+			}
+			orderDetailRepository.saveAll(details);
 			attributes.addFlashAttribute("successadd", "Thành công");
 			System.out.println("acdckajs" + orderDetail.getOrderDetailId());
 			return "redirect:/admin/order/detail/" + idOrder;
 		} catch (Exception e) {
 			attributes.addFlashAttribute("erroradd", "Thất bại");
-			return "/admin/orders";
+			return "redirect:/admin/orders";
 		}
 	}
 	@PostMapping("/orderdetail/updatePriceForOrder")
@@ -119,6 +147,30 @@ public class OrderDetailController {
 			return "/admin/orders";
 		}
 		return "redirect:/admin/orders";
+	}
+
+	@PostMapping("/orderdetail/UpdateOrderDetail")
+	public String updateOrderDetail(@Validated @ModelAttribute("orderdetail") OrderDetail orderDetails, ModelMap model,RedirectAttributes attributes) {
+		long orderId= orderDetails.getOrder().getOrderId();
+		try {
+			List<OrderDetail> lsDetail = orderDetailRepository.findAll();
+			Boolean isTrue = true;
+			for(OrderDetail details : lsDetail  ) {
+				if(isTrue) {
+					orderDetailRepository.save(orderDetails);
+					attributes.addFlashAttribute("errorsize", "Thành công");					
+				}
+				else {
+					attributes.addFlashAttribute("errorsize", "Thất bại");
+				}
+			}
+			return "redirect:/admin/order/detail/" + orderId;
+		}catch(Exception e) {
+			attributes.addFlashAttribute("errorsize", "Thất bại");
+			return "redirect:/admin/order/detail/" + orderId;
+		}
+
+
 	}
 	
 	@GetMapping("/orderdetail/delete/{id}")

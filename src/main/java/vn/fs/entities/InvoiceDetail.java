@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 
 @SuppressWarnings("serial")
 
-
 @Entity
 @Table(name = "invoice_detail")
 public class InvoiceDetail implements Serializable{

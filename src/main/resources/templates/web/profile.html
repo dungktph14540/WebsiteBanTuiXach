@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 
@@ -65,7 +65,7 @@
 		<meta name="title" content="greeny - Ecommerce Food Store HTML Template" />
 		<meta name="keywords"
 			content="organic, food, shop, ecommerce, store, html, bootstrap, template, agriculture, vegetables, products, farm, grocery, natural, online" />
-		<title>Web bán mũ bảo hiểm Otis</title>
+		<title>Web bán túi xách nam ADO</title>
 		<link rel="stylesheet" href="fonts/flaticon/flaticon.css" />
 		<link rel="stylesheet" href="fonts/icofont/icofont.min.css" />
 		<link rel="stylesheet" href="fonts/fontawesome/fontawesome.min.css" />
@@ -82,7 +82,7 @@
 		<header th:replace="~{/web/fragments/header :: header}"></header>
 
 		<section class="inner-section single-banner"
-			style="background: url(images/showroom-XD-tmdt-Large.jpg) no-repeat center">
+			style="background: url(images/) no-repeat center">
 			<div class="container">
 				<h2>thông tin tài khoản</h2>
 				<ol class="breadcrumb">
@@ -100,7 +100,7 @@
 								<h4>Thông tin tài khoản</h4>
 							</div>
 							<div class="account-content">
-								<form th:action="@{/updateUser}" method="post" th:object="${user}" class="user-form">
+								<form th:action="@{/updateUser}" method="post" th:object="${user}" class="user-form" id="myForm">
 									<div class="row">
 										<div class="col-lg-2">
 											<div class="profile-image">
@@ -112,7 +112,8 @@
 										<div class="col-md-6 col-lg-4">
 											<div class="form-group">
 												<label class="form-label">Họ và tên</label> <input class="form-control"
-													type="text" th:value="${user.name}" id="name" name="name" onblur="validateName()" />
+													type="text" th:value="${user.name}" id="name" name="name"
+													onblur="validateName()" />
 												<span id="badgeName" class="badge text-white bg-danger"
 													style="padding: 8px 10px 5px 10px; margin: -15px 0 0 0; display: none;">Vui
 													lòng nhập họ và tên</span>
@@ -132,8 +133,8 @@
 										<div class="col-md-6 col-lg-4">
 											<div class="form-group">
 												<label class="form-label">Số điện thoại</label> <input
-													class="form-control" type="text" th:value="${user.sdt}" id="sdt"
-													name="sdt" onblur="validatePhoneNumber()" />
+													class="form-control" type="text" th:value="${user.sdt}" id="phoneNumber"
+													name="sdt" />
 												<span id="badgenumber" class="badge text-white bg-danger"
 													style="padding: 8px 10px 5px 10px; margin: -15px 0 0 0; display: none;">Bạn
 													nhập sai định dạng số điện thoại hoặc không tồn tại ở
@@ -143,19 +144,19 @@
 										<div class="col-md-6 col-lg-6">
 											<div class="form-group">
 												<label class="form-label">Địa chỉ</label><input class="form-control"
-													type="text" th:value="${user.address}" id="address"
-													name="address" onblur="validateAddress()"/>
+													type="text" th:value="${user.address}" id="address" name="address"
+													onblur="validateAddress()" />
 												<span id="badgeAddr" class="badge text-white bg-danger"
 													style="padding: 8px 10px 5px 10px; margin: -15px 0 0 0; display: none;">Vui
 													lòng nhập địa chỉ</span>
 											</div>
 										</div>
-										
+
 									</div>
 									<div class="row">
 										<div class="col-lg-10"></div>
 										<div class="col-lg-2">
-											<button type="submit" class="btn btn-inline">Cập nhật</button>
+											<button type="button"  class="btn btn-inline" onclick="validateAndSubmitForm()" >Cập nhật</button>
 										</div>
 									</div>
 								</form>
@@ -179,9 +180,12 @@
 																<tr>
 																	<th scope="col">Mã Order</th>
 																	<th scope="col">Ngày đặt</th>
-																	<th scope="col">Tổng tiền</th>
+
 																	<th scope="col">Địa chỉ</th>
 																	<th scope="col">Số điện thoại</th>
+																	<th scope="col">Loại ship</th>
+																	<th scope="col">Phí ship</th>
+																	<th scope="col">Tổng tiền đơn hàng</th>
 																	<th scope="col">Trạng thái</th>
 																	<th scope="col">Hành động</th>
 																</tr>
@@ -194,15 +198,22 @@
 																	<td class="table-name">
 																		<h6>[[${item.orderDate}]]</h6>
 																	</td>
-																	<td class="table-price">
-																		<h6>[[${#numbers.formatDecimal(item.amount,
-																			1, 'DEFAULT', 0, 'DEFAULT')}+' đ']]</h6>
-																	</td>
+
 																	<td class="table-address">
 																		<h6>[[${item.address}]]</h6>
 																	</td>
 																	<td class="table-brand">
 																		<h6>[[${item.phone}]]</h6>
+																	</td>
+																	<td class="table-brand">
+																		<h6>[[${item.loaiShip}]]</h6>
+																	</td>
+																	<td class="table-price">
+																		<h6 th:text="${#numbers.formatDecimal(item.priceShip, 1, 'DEFAULT', 0, 'DEFAULT')} + ' đ'"></h6>
+																	</td>
+																	<td class="table-price">
+																		<h6>[[${#numbers.formatDecimal(item.amount,
+																			1, 'DEFAULT', 0, 'DEFAULT')}+' đ']]</h6>
 																	</td>
 																	<td class="table-status">
 																		<div th:if="${item.status==0}">
@@ -238,13 +249,13 @@
 																			</a>
 																		</div>
 																		<div th:if="${item.status==5}">
-																			<a style="cursor:pointr; color: #ff3838;"
-																				data-toggle="tooltip"
-																				data-placement="top"
-																				th:title="${item.LyDo}"> <i
-																					class="fa fa-info-circle"> Đã
+																			<a style="cursor:pointr; color: #ff3838;">
+																				<i class="fa fa-info-circle"> Đã
 																					hủy</i>
 																			</a>
+																			<p class="fa mt-1"
+																				style="cursor:pointr; color: #ff3838;">
+																				Lý do:<a>[[${item.lyDo}]]</a></p>
 																		</div>
 																		<div th:if="${item.status==6}">
 																			<a style="cursor: pointr; color: #119744;">
@@ -336,17 +347,35 @@
 		</section>
 
 		<!-- Huỷ đơn hàng -->
+
 		<script>
 			function showConfigCancelModalDialog(id) {
 				$('#idCancel').text(id);
-				$('#yesOptionCanCel').attr('href', '/order/cancel/' + id);
-				$('#configmationCancelId').modal('show');
+				var a = $('#LyDoHuy').val().trim();
+				
+				$('#configmationCancelId').modal(
+					'show');
 			}
-			$(function () {
-				$('[data-toggle="tooltip"]').tooltip()
-			})
+			function checktext() {
+				var a = $('#idCancel').text().trim();
+				var b = $('#LyDoHuy').val().trim();
+				$('#yesOptionCanCel')
+					.attr(
+						'href',
+						'/order/cancel/'
+						+ a + '/' + b);
+			}
+			function addLyDo() {
+				var a = $('#idCancel').text().trim();
+				var b = $('#LyDoHuy').val().trim();
+				$('#yesOptionCanCel')
+					.attr(
+						'href',
+						'/order/cancel/'
+						+ a + '/' + b);
+			}
+	
 		</script>
-
 		<!-- Modal -->
 		<div class="modal" id="configmationCancelId">
 			<div class="modal-dialog modal-dialog-centered">
@@ -361,9 +390,15 @@
 								Bạn có muốn huỷ đơn hàng có mã " <span style="color: #119744" id="idCancel"></span> "
 								không ?
 							</p>
+							<div class="row">
+								<input type="text" class="form-control" oninput="checktext();" id="LyDoHuy"
+									style="width: 94%; margin: 0 0 0 15px; border-color: #c3c3c4;" value=""
+									placeholder="Lý do hủy đơn">
+							</div>
 						</div>
 						<div class="modal-footer">
 							<a id="yesOptionCanCel" type="button" class="btn btn-success">Có</a>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Không</button>
 						</div>
 					</div>
 
@@ -373,7 +408,7 @@
 
 
 
-		<section class="news-part" style="background: url(images/slider4.png) no-repeat center">
+		<section class="news-part" style="background: url(images/) no-repeat center">
 			<div class="container">
 				<div class="row align-items-center">
 					<div class="col-md-5 col-lg-6 col-xl-7"></div>
@@ -405,6 +440,22 @@
 		<script src="js/slick.js"></script>
 		<script src="js/main.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		
+		<script>
+        function validateAndSubmitForm() {
+            var phoneNumber = document.getElementById("phoneNumber").value;
+            var phoneNumberRegex = /^(0[23456789]|1[6789])[0-9]{8}$/;
+
+            if (phoneNumberRegex.test(phoneNumber)) {
+               
+
+                // Nếu số điện thoại hợp lệ, thực hiện hành động submit form
+                document.getElementById("myForm").submit();
+            } else {
+                alert("Số điện thoại không hợp lệ! Vui lòng nhập theo định dạng Việt Nam.");
+            }
+        }
+    </script>
 		<script>
 			function validatePhoneNumber() {
 				var phoneNumber = document.getElementById("sdt").value;
@@ -454,7 +505,7 @@
 
 
 		</script>
-		
+
 
 	</body>
 

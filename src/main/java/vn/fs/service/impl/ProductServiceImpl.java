@@ -54,7 +54,9 @@ public class ProductServiceImpl implements ProductService{
 	public List<Product> getAllSize(Long id){
 		return productRepository.listProductBySize(id);
 	}
-	
+	public List<Product> getAllHang(Long id){
+		return productRepository.listProductByHang(id);
+	}
 	public Product getAllSize2( int masp, Long idSize){
 		return productRepository.ProductBySize2(masp, idSize);
 	}
@@ -89,6 +91,7 @@ public class ProductServiceImpl implements ProductService{
         productDto.setProductImage(product.getProductImage());
         productDto.setPrice(product.getPrice());
         productDto.setMaSP(product.getMaSP());
+        productDto.setHang(product.getHang());
 		return productDto;
 	}
 	private List<ProductDto> transfer(List<Product> products){
@@ -109,6 +112,7 @@ public class ProductServiceImpl implements ProductService{
             productDto.setPrice(product.getPrice());
             productDto.setMaSP(product.getMaSP());
             productDto.setStatus(product.getStatus());
+            productDto.setHang(product.getHang());
             productDto.setFavorite(false);
             productDtoList.add(productDto);
         }

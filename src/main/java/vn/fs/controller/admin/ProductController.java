@@ -37,10 +37,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import vn.fs.dto.ProductDto;
 import vn.fs.entities.Category;
+import vn.fs.entities.Hang;
 import vn.fs.entities.Product;
 import vn.fs.entities.Size;
 import vn.fs.entities.User;
 import vn.fs.repository.CategoryRepository;
+import vn.fs.repository.HangRepository;
 import vn.fs.repository.ProductRepository;
 import vn.fs.repository.SizeRepository;
 import vn.fs.repository.UserRepository;
@@ -63,7 +65,8 @@ public class ProductController{
 	
 	@Autowired
 	UserRepository userRepository;
-	
+	@Autowired
+	HangRepository hangRepository;
 	@Autowired
 	ProductServiceImpl productServiceImpl;
 	@Autowired
@@ -157,11 +160,19 @@ public class ProductController{
 
 		return sizeList;
 	}
+	@ModelAttribute("hangList")
+	public List<Hang> showHang(Model model) {
+		List<Hang> hangList = hangRepository.findAll();
+		model.addAttribute("hangList", hangList);
+
+		return hangList;
+	}
 	@GetMapping(value = "/saveproduct")
 	    public String saveProduct(Model model){
 	        model.addAttribute("productdto", new ProductDto());
 	        model.addAttribute("categories", categoryRepository.findAll());
 	        model.addAttribute("size", sizeRepository.findAll());
+	        model.addAttribute("hang", hangRepository.findAll());
 	        return "redirect:/admin/products";
 	    }
 	@PostMapping(value = "/saveproduct")
@@ -187,6 +198,7 @@ public class ProductController{
 			product.setDiscount(productdto.getDiscount());
 			product.setEnteredDate(productdto.getEnteredDate());
 			product.setMaSP(productdto.getMaSP());
+			product.setHang(productdto.getHang());
 			product.setProductImage(file.getOriginalFilename());
 			productService.save(product);
 			attributes.addFlashAttribute("successadd", "Thành công");
@@ -235,6 +247,18 @@ public class ProductController{
 	    ProductDto product = productService.getById(id);
 	    if (product != null) {
 	    	model.addAttribute("price0",product.getPrice());
+	    	System.out.println(product.getPrice());
+	        return new ResponseEntity<>(product, HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+	}
+	@GetMapping(value = "/getProductCBOOO/{id}")
+	@ResponseBody
+	public ResponseEntity<ProductDto> getProductPriced(@PathVariable("id") Long id,ModelMap model) {
+	    ProductDto product = productService.getById(id);
+	    if (product != null) {
+	    	model.addAttribute("price01",product.getPrice());
 	    	System.out.println(product.getPrice());
 	        return new ResponseEntity<>(product, HttpStatus.OK);
 	    } else {

@@ -33,6 +33,21 @@
 			border: 2px solid rgb(138, 138, 138);
 		}
 	</style>
+	<style>
+		/* CSS để định dạng giao diện cho trạng thái disabled */
+		.disabled {
+			color: gray;
+			pointer-events: none;
+			/* Nếu sử dụng pointer-events, thì link sẽ không phản ứng khi được nhấp */
+			text-decoration: none;
+			cursor: not-allowed;
+		}
+	</style>
+	<style>
+		.grayText {
+			color: gray;
+		}
+	</style>
 </head>
 
 <body>
@@ -40,7 +55,7 @@
 	<!--************************************
 				Header Start
 		*************************************-->
-	<header th:replace="~{web/fragments/header :: header}"></header>
+	<header th:replace="~{/web/fragments/header :: header}"></header>
 	<!--************************************
 				Header End
 		*************************************-->
@@ -114,18 +129,19 @@
 
 						<div class="mb-3 mt-3" style="margin-top: 15px;" role="toolbar"
 							aria-label="Toolbar with button groups">
-							<a type="button" class="btn size btn-outline-secondary"  id="btnSizeS" onclick="selectSize('1')">Đen</a> 
-								<a type="button" class="btn size btn-outline-secondary" id="btnSizeM" onclick="selectSize('2')">Nâu</a> 
-								<!--<a type="button" class="btn size btn-outline-secondary" id="btnSizeL" onclick="selectSize('3')">L</a>
-								<a type="button" class="btn size btn-outline-secondary" id="btnSizeXL" onclick="selectSize('4')">XL</a>-->
+							<a type="button" class="btn size btn-outline-secondary" id="btnSizeS"
+								onclick="selectSize('1')">Đen</a>
+							<a type="button" class="btn size btn-outline-secondary" id="btnSizeM"
+								onclick="selectSize('2')">Nâu</a>
 
 						</div>
+
 						<div class="row">
 							<div class="col-md-2">Số lượng:</div>
 							<div class="col-md-3">
-								<input type="number" id="quantity" min="1" max="50"
-									oninput="checktext();getSL();LamTron();" class="form-control" value="1"
-									style="width: 80%; height: 25px; border-radius: 6px; padding: 0px 20px 0px; color: var(- -text); background: var(- -chalk); border: 1px solid var(- -border);">
+								<input type="number" id="quantity" value="1" oninput="checktext();getSL();LamTron();"
+									onchange="getSL()" class="form-control" style="width: 80%; height: 25px; border-radius: 6px; padding: 0px 20px 0px; color: var(- -text); 
+									background: var(- -chalk); border: 1px solid var(- -border);">
 							</div>
 
 							<div class="col-md-2">
@@ -140,22 +156,24 @@
 								style="padding: 8px 10px 5px 10px; margin: 0 0 0 -35px;display: none;">Chỉ được mua tối
 								đa 10 sản phẩm</span>
 						</div>
-						<p class="mt-4">Mô tả sản phẩm:<a>[[${product.ghiChu}]]</a></p>
+						<p class="mt-4">Số Ngăn:<a>[[${product.ghiChu}]]</a></p>
 
 
 
 
 						<div class="details-add-group">
-							<a class="product-add1" style="background-color: #119744" title="Thêm giỏ hàng"
-								id="addtocart"> <i style="color: white" class="fas fa-shopping-basket"></i> <span
-									style="color: white">Thêm giỏ hàng</span>
+							<a type="button" class="product-add1" style="background-color: rgb(192, 192, 192)"
+								title="Thêm giỏ hàng" id="addtocart" onclick="getSL()" href="#">
+								<i style="color: white" class="fas fa-shopping-basket"></i>
+								<span style="color: white">Thêm giỏ hàng</span>
 							</a>
 
 						</div>
 						<div class="details-action-group">
-							<a class="details-wish" href="javascript:void(0);" title="Yêu thích"> <i
-									class="icofont-heart"></i> <span>Thêm
-									yêu thích</span></a>
+							<a class="details-wish" href="javascript:void(0);" title="Yêu thích">
+								<i class="icofont-heart"></i>
+								<span>Thêm yêu thích</span>
+							</a>
 						</div>
 
 					</div>
@@ -164,6 +182,7 @@
 		</div>
 	</section>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
 	<script type="text/javascript">
 		function selectSize(type) {
 			var a = $('#maspSize').val();
@@ -213,19 +232,16 @@
 		function getSL() {
 			var a = $('#quantity').val().trim();
 			var b = $('#productQuatity').val().trim();
+			var button = document.getElementById('addtocart');
 			if (parseInt(a) > parseInt(b)) {
 				$('#quantity').val($('#productQuatity').val().trim());
 			}
-			if (parseInt(a) < 1) {
-				$('#quantity').val(1);
+			if (parseInt(a) <= 0 || $('#quantity').val().trim() == "") {
+				button.classList.add('disabled');
+			} else {
+				button.classList.remove('disabled');
 			}
-			if ($('#quantity').val().trim() == "") {
-				$('#quantity').val(1);
-			}
-			if (parseInt(a) > 10) {
-				$('#quantity').val(10);
-				$('#badgeIdtoida').css("display", "block");
-			}
+
 		}
 		function checktext() {
 			debugger;
@@ -244,7 +260,32 @@
 			$('#quantity').val(parseFloat($('#quantity').val()).toFixed());
 		}
 	</script>
+	<script>
+		function checkAndHideButtons() {
+			var buttonDen = document.getElementById('btnSizeS');
+			var buttonNau = document.getElementById('btnSizeM');
+			var maspSizeValue = $('#maspSize').val();
+			// Thực hiện kiểm tra dữ liệu ở đây
 
+
+			// Ẩn/hiện button "Đen" dựa trên điều kiện
+			if (maspSizeValue == 0) {
+				buttonDen.style.display = 'none';
+			} else {
+				buttonDen.style.display = 'inline-block';
+			}
+
+			// Ẩn/hiện button "Nâu" dựa trên điều kiện
+			if (maspSizeValue == 0) {
+				buttonNau.style.display = 'none';
+			} else {
+				buttonNau.style.display = 'inline-block';
+			}
+		}
+
+		// Gọi hàm khi trang được tải hoặc khi bạn muốn kiểm tra lại trạng thái button
+		window.onload = checkAndHideButtons;
+	</script>
 
 	<section class="section newitem-part">
 		<div class="container">

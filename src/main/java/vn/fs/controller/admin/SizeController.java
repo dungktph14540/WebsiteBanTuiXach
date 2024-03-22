@@ -76,7 +76,7 @@ public class SizeController {
 				attributes.addFlashAttribute("successsize", "Thành công");
 			} else {
 				attributes.addFlashAttribute("errorsize", "Thất bại"); // check trùng ở đây
-				model.addAttribute("errors", "Size " + size.getNameSize() + " đã tồn tại ");
+				model.addAttribute("errors", "Màu " + size.getNameSize() + " đã tồn tại ");
 
 				return "admin/size";
 			}
@@ -94,12 +94,26 @@ public class SizeController {
 	}
 
 	// get Edit category
-	@GetMapping(value = "/editSiae/{id}")
+	@GetMapping(value = "/editSize/{id}")
 	public String editCategory(@PathVariable("id") Long id, ModelMap model) {
 		Size size = sizeRepository.findById(id).orElse(null);
 
 		model.addAttribute("size", size);
 
-		return "admin/size";
+		return "admin/editMau";
+	}
+	@GetMapping("/delete-size/{id}")
+	public String delMau(@PathVariable("id") Long id, Model model,RedirectAttributes attributes) {
+		try {
+			sizeRepository.deleteById(id);
+			attributes.addFlashAttribute("successmessagesize", "Đã xóa thành công");
+
+		} catch (Exception e) {
+			attributes.addFlashAttribute("errormessagesize", "Không thể xóa");
+
+		}
+
+
+		return "redirect:/admin/size";
 	}
 }

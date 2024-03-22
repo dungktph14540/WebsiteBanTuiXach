@@ -7,18 +7,16 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import vn.fs.entities.CartItem;
-import vn.fs.entities.InvoiceCart;
 import vn.fs.entities.Product;
 import vn.fs.service.ShoppingCartService;
+import vn.fs.entities.InvoiceCart;
 
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
 	private Map<Long, CartItem> map = new HashMap<Long, CartItem>(); // <Long, CartItem>
-	
 	private Map<Long, InvoiceCart> map2 = new HashMap<Long, InvoiceCart>(); // <Long, CartItem>
-
 
 	@Override
 	public void add(CartItem item) {
@@ -120,7 +118,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	public void clear() {
 		map.clear();
 	}
-	
 	@Override
 	public void clearInvoice() {
 		map2.clear();
@@ -144,12 +141,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	public void remove(Product product) {
 
 	}
-
 	@Override
 	public Collection<InvoiceCart> getInvoiceCarts() {
 		return map2.values();
 	}
-
 	@Override
 	public InvoiceCart updateInvoice(Long id, int quantity1) {
 		Collection<InvoiceCart> cartItems = map2.values();

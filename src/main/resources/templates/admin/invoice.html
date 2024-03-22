@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta charset="UTF-8" />
-	<title>Otis - Trang quản trị</title>
+	<title>ADO - Trang quản trị</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon" />
 
@@ -94,7 +94,7 @@
 								<div class="tab-content mt-2" style="height: 550px; overflow: scroll;">
 									<div class="tab-pane fade show active">
 										<div id="yourExistingContentId">
-											<form th:action="@{/admin/invoices/addInvoide}" method="post"
+											<form th:action="@{/admin/invoices/addInvoide}" method="post" id="myForm"
 												class="col-sm-12" th:object="${invoice}">
 												<div class="row">
 													<div class="col-sm-6">
@@ -106,7 +106,9 @@
 														<div class="form-group">
 															<label>Tổng tiền: </label>
 															<input class="form-control" id="totalPriceInput"
-																th:field="*{amount}" type="text" readonly>
+																th:field="*{amount}" type="text" readonly
+																>
+																
 														</div>
 													</div>
 													<div class="col-sm-6">
@@ -117,7 +119,7 @@
 														</div>
 														<div class="form-group">
 															<label>Số điện thoại: </label>
-															<input class="form-control" th:field="*{phonenumber}"
+															<input class="form-control" id="phonenumber" name="phonenumber" th:field="*{phonenumber}"
 																type="text" required>
 														</div>
 													</div>
@@ -143,7 +145,7 @@
 																	<td th:name="checkbox" th:id="${State.index + 1}"
 																		hidden>
 																	</td>
-
+										
 																	<td id="idproductGio"
 																		th:value="${item.product.productId}" hidden>
 																		[[${item.product.productId}]]</td>
@@ -171,7 +173,7 @@
 																			oninput="updateInvoi(this);"
 																			onblur="updateInvoi(this);"
 																			onclick="updateInvoi(this);"
-																			th:value="${item.quantity}" required>
+																			th:value="${item.quantity}">
 																	</td>
 																	<td class="table-price" id="price">
 																		[[${#numbers.formatDecimal((item.product.price -
@@ -202,67 +204,9 @@
 															</tbody>
 
 
-															<!-- <td class="table-action">
-
-																		<a class="view"
-																			th:id="'submitInvoice'+${State.index + 1}"
-																			title="Cập nhật">
-																			<i class="fa fa-edit"></i>
-																		</a>
-
-																		<a class="trash" href="javascript:void(0);"
-																			title="Xóa sản phẩm"
-																			th:data-id="${item.product.productId}"
-																			th:data-name="${item.product.productName}"
-																			onclick="showConfigModalDialogGio(this.getAttribute('data-id'), this.getAttribute('data-name'))">
-																			<i class="icofont-trash"></i>
-																		</a>
-																		<input type="text" id="quanPro"
-																			th:value="${item.product.quantity}"
-																			hidden="hidden">
-																	</td>
-																	<script>
-																		function updateInvoi(x) {
-																			var y = x.closest('tr').rowIndex;
-																			console.log(y);
-
-																			var b = $('#row_' + y + ' #quantity').val().trim();
-																			var a = $('#row_' + y + ' #idproductGio').text().trim();
-
-																			// Lấy hai số cuối cùng của productId
-
-																			var c = $('#row_' + y + ' #quanPro').val().trim();
-
-																			if (parseInt(b) > parseInt(c)) {
-																				$('#row_' + y + ' #quantity').val($('#row_' + y + ' #quanPro').val());
-																				var e = $('#row_' + y + ' #quanPro').val().trim();
-																				var d = console.log(a);
-																				$('#submitnoInvoice' + y).attr('href', '/admin/updateInvoice/' + d + '/' + e);
-																			} else if (parseInt(b) < 1) {
-																				$('#row_' + y + ' #quantity').val(1);
-																				$('#submitInvoice' + y).attr('href', '/admin/updateInvoice/' + a + '/' + 1);
-																			} else {
-																				$('#submitInvoice' + y).attr('href', '/admin/updateInvoice/' + a + '/' + b);
-																			}
-
-																			console.log(a);
-																			console.log(b);
-																		}
-
-																	</script>
-																	<script>
-																		function showConfigModalDialogGio(id, name) {
-																			$('#productName').text(name);
-																			$('#yesOption').attr('href', '/admin/removeInvoice/' + id);
-																			$('#configmationId').modal('show');
-																		}
-
-																	</script>
-
-																</tr>
-															</tbody> -->
+															
 														</table>
-														<button class="btn btn-primary" type="submit">
+														<button class="btn btn-primary" type="button" onclick="validateAndSubmitForm()">
 															Tạo hóa đơn
 														</button>
 													</div>
@@ -300,8 +244,8 @@
 								// Lấy số lượng chữ số cần cắt
 								var digitsToCut = Math.floor(numberOfCharacters / 2);
 
-								// // Cắt chữ số theo quy tắc
-								// var productIdLastDigits = a.slice(-digitsToCut);
+								// Cắt chữ số theo quy tắc
+								var productIdLastDigits = a.slice(-digitsToCut);
 
 								var c = $('#row_' + y + ' #quanPro').val().trim();
 
@@ -383,7 +327,6 @@
 									</div>
 								</div>
 								<form th:action="@{/admin/invoices/search}" method="get">
-
 									<div class="input-group mb-3">
 										<input name="searchTerm" id="searchTerm" type="text" class="form-control"
 											placeholder="Tên sản phẩm hoặc mã sản phẩm" aria-label="Tên sản phẩm"
@@ -419,12 +362,11 @@
 															<span>Màu sắc: [[${item.size.nameSize}]]</span>
 														</div>
 														<div>Số lượng: <input name="quantity" type="number" min="1"
-																max="50" value="1">
+																id="quantityProD" th:attr="max=${item.quantity}" class="quantity-input" oninput="checkMaxValue()" value="1">
 															<span id="badgeId" class="badge text-white bg-info"
 																style="padding: 8px 10px 5px 10px; margin: 0 0 0 0px;">[[${item.quantity}]]
 																sản phẩm có sẵn</span>
-
-
+																
 														</div><br>
 														<div>Đơn giá: [[${item.price}]] VNĐ</div>
 													</div>
@@ -449,25 +391,22 @@
 									</div>
 
 								</div>
-
 							</div>
 						</div>
 					</div>
+
+
 				</div>
-
-
 			</div>
 		</div>
-
-	</div>
 	</div>
 	</div>
 	<footer class="footer">
 		<div class="container-fluid">
 
 			<div class="copyright ml-auto">
-				2022, made with <i class="fa fa-heart heart text-danger"></i> by <a
-					href="javascript:void(0);">OTIS-SHOP</a>
+				2023, made with <i class="fa fa-heart heart text-danger"></i> by <a
+					href="javascript:void(0);">ADO-SHOP</a>
 			</div>
 		</div>
 	</footer>
@@ -501,7 +440,37 @@
 	<script src="/js/main.js"></script>
 	<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 	<script src="https://cdn.rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+	<script>
+		document.addEventListener('input', function(event) {
+			if (event.target.classList.contains('quantity-input')) {
+				checkMaxValue(event.target);
+			}
+		});
+	
+		function checkMaxValue(inputElement) {
+			var maxValue = parseInt(inputElement.getAttribute('max'));
+			var currentValue = parseInt(inputElement.value);
+	
+			if (currentValue > maxValue) {
+				inputElement.value = maxValue;
+			}
+		}
+	</script>
+	<script>
+        function validateAndSubmitForm() {
+            var phoneNumber = document.getElementById("phonenumber").value;
+            var phoneNumberRegex = /^(0[23456789]|1[6789])[0-9]{8}$/;
 
+            if (phoneNumberRegex.test(phoneNumber)) {
+                
+
+                // Nếu số điện thoại hợp lệ, thực hiện hành động submit form
+                document.getElementById("myForm").submit();
+            } else {
+                alert("Số điện thoại không hợp lệ! Vui lòng nhập theo định dạng Việt Nam.");
+            }
+        }
+    </script>
 	<script>
 		let video;
 		let scanner;
@@ -581,7 +550,6 @@
 		});
 
 	</script>
-
 	<!-- 
 	<script th:inline="javascript">
 		$(document).ready(function () {

@@ -138,14 +138,16 @@ public class ProfileController extends CommomController{
 		return new ModelAndView("web/historyOrderDetail");
 	}
 	
-	@RequestMapping("/order/cancel/{order_id}")
-	public ModelAndView cancel(ModelMap model, @PathVariable("order_id") Long id) {
+	@RequestMapping("/order/cancel/{order_id}/{LyDoHuy}")
+	public ModelAndView cancel(ModelMap model, @PathVariable("order_id") Long id,
+			@PathVariable("LyDoHuy") String LyDoHuy) {
 		Optional<Order> o = orderRepository.findById(id);
 		if (o.isEmpty()) {
 			return new ModelAndView("redirect:/profile", model);
 		}
 		Order oReal = o.get();
 		oReal.setStatus((short) 5);
+		oReal.setLyDo(LyDoHuy);
 		orderRepository.save(oReal);
 
 		return new ModelAndView("redirect:/profile", model);

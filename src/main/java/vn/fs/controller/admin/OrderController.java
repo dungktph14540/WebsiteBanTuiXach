@@ -2,6 +2,7 @@ package vn.fs.controller.admin;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -99,7 +100,11 @@ public class OrderController {
 		double totalPrice = listO.stream()
                 .mapToDouble(item -> (item.getPrice() - (item.getPrice() * item.getProduct().getDiscount() / 100)) * item.getQuantity())
                 .sum();
-        model.addAttribute("totalPrice", totalPrice);
+		DecimalFormat decimalFormat = new DecimalFormat("###,###");
+
+		String formattedTotalPrice = decimalFormat.format(totalPrice).replace(",", "");
+
+        model.addAttribute("totalPrice", formattedTotalPrice);
         
 		
 		// set active front-end

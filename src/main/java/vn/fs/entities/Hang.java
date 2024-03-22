@@ -9,13 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @SuppressWarnings("serial")
-@Data
-@Setter @Getter
 
 @Entity
 @Table(name = "hang")
@@ -27,7 +27,7 @@ public class Hang implements Serializable{
 	@Column(name = "tenhang")
 	private String tenhang;
 
-	
+
 	public Hang() {
 		super();
 	}

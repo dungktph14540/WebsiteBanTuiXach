@@ -39,7 +39,7 @@
             </div>
 
 
-            <form th:action="@{/register}" method="post" th:object="${user}" class="user-form">
+            <form th:action="@{/register}" method="post" th:object="${user}" class="user-form" id="myForm">
               <div class="form-group">
                 <input type="email" th:field="*{email}" id="email" onblur="formatTrim();" oninput="checktext();" class="form-control" placeholder="Địa chỉ Email"
                   autocomplete="off" required="required" />
@@ -55,10 +55,11 @@
 																	trống!</span>
               </div>
               <div class="form-group">
-                <input type="text" th:field="*{sdt}" id="sdt" onblur="formatTrim();" oninput="checktext();" name="sdt" class="form-control"
+                <input type="text" th:field="*{sdt}" id="sdt" onblur="formatTrim();" oninput="checktext();validatePhoneNumber()" name="sdt" class="form-control"
                   placeholder="Số điện thoại" autocomplete="off" required="required" />
                   <span id="tbsdt" style="display: none;color: red">Không được để
 																	trống!</span>
+				<span id="phoneError" style="color: red;"></span>
               </div>
               <div class="form-group">
                 <input type="text" th:field="*{address}" id="address" onblur="formatTrim();" oninput="checktext();" name="address" class="form-control"
@@ -80,7 +81,7 @@
               </div>
 
               <div class="form-button">
-                <button type="submit" id="DK">Đăng Ký</button>
+                <button type="button" onclick="validateAndSubmitForm()" id="DK">Đăng Ký</button>
               </div>
             </form>
           </div>
@@ -149,7 +150,21 @@
       }
     }
   </script>
+	<script>
+        function validateAndSubmitForm() {
+            var phoneNumber = document.getElementById("sdt").value;
+            var phoneNumberRegex = /^(0[23456789]|1[6789])[0-9]{8}$/;
 
+            if (phoneNumberRegex.test(phoneNumber)) {
+                
+
+                // Nếu số điện thoại hợp lệ, thực hiện hành động submit form
+                document.getElementById("myForm").submit();
+            } else {
+                alert("Số điện thoại không hợp lệ! Vui lòng nhập theo định dạng Việt Nam.");
+            }
+        }
+    </script>
   <script src="vendor/bootstrap/jquery-1.12.4.min.js"></script>
   <script src="vendor/bootstrap/popper.min.js"></script>
   <script src="vendor/bootstrap/bootstrap.min.js"></script>

@@ -1,5 +1,6 @@
 package vn.fs.controller;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -266,7 +267,7 @@ public class CartController extends CommomController {
 	// submit checkout
 	@PostMapping(value = "/checkout")
 	@Transactional
-	public String checkedOut(Model model, Order order, HttpServletRequest request, User user)
+	public String checkedOut(Model model,Principal principal, Order order, HttpServletRequest request, User user)
 			throws MessagingException {
 
 		String checkOut = request.getParameter("checkOut");
@@ -301,13 +302,19 @@ public class CartController extends CommomController {
 
 		session = request.getSession();
 		Date date = new Date();
-		
+		String tenkh = order.getTenkh();
+		 
 		order.setOrderDate(date);
 		order.setStatus(0);
 		order.getOrderId();
 		order.setAmount(totalPrice);
 		order.setUser(user);
 		order.getLoaiShip();
+		if (StringUtils.isBlank(tenkh)) {
+			order.setTenkh(order.getUser().getName());
+		}else {
+			order.setTenkh(order.getTenkh());
+		}
 		orderRepository.save(order);
 
 		for (CartItem cartItem : cartItems) {
@@ -327,7 +334,7 @@ public class CartController extends CommomController {
 		shoppingCartService.clear();
 		session.removeAttribute("cartItems");
 		model.addAttribute("orderId", order.getOrderId());
-
+		
 		return "redirect:/checkout_success";
 	}
 
@@ -342,7 +349,7 @@ public class CartController extends CommomController {
 		double totalPrice = 0;
 		for (CartItem cartItem : cartItems) {
 			double price = cartItem.getQuantity() * cartItem.getProduct().getPrice();
-			totalPrice += price - (price * cartItem.getProduct().getDiscount() / 100) + 30000;
+			totalPrice += price - (price * cartItem.getProduct().getDiscount() / 100) + 20000;
 		}
 		model.addAttribute("totalPrice", totalPrice);
 		model.addAttribute("totalCartItems", shoppingCartService.getCount());
@@ -352,12 +359,18 @@ public class CartController extends CommomController {
 			if (payment.getState().equals("approved")) {
 
 				session = request.getSession();
+				String tenkh = orderFinal.getTenkh();
 				Date date = new Date();
 				orderFinal.setOrderDate(date);
 				orderFinal.setStatus(6);
 				orderFinal.getOrderId();
 				orderFinal.setUser(user);
 				orderFinal.getLoaiShip();
+				if (StringUtils.isBlank(tenkh)) {
+					orderFinal.setTenkh(orderFinal.getUser().getName());
+				}else {
+					orderFinal.setTenkh(orderFinal.getTenkh());
+				}
 				orderFinal.setAmount(totalPrice);
 				orderRepository.save(orderFinal);
 
@@ -372,7 +385,7 @@ public class CartController extends CommomController {
 				}
 
 				// sendMail
-				commomDataService.sendSimpleEmail(user.getEmail(), "Ado-Shop Xác Nhận Đơn hàng", "aaaa", cartItems,
+				commomDataService.sendSimpleEmailpay(user.getEmail(), "Ado-Shop Xác Nhận Đơn hàng", "aaaa", cartItems,
 						totalPrice, orderFinal);
 
 				shoppingCartService.clear();

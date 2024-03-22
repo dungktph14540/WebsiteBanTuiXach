@@ -114,6 +114,19 @@
 																</select>
 															</div>
 														</div>
+														<div class="col-md-6 pr-0">
+															<div class="form-group form-group-default">
+																<label>Hãng</label>
+																<select class="form-control"
+																		name="hang" th:field="*{hang.idhang}" id="idhang">
+																	<option th:each="item : ${hangList}"
+																			th:value="${item.idhang}" th:text="${item.tenhang}"
+																			th:selected="${item.idhang == product.hang.idhang}">
+																		Tên hãng
+																	</option>
+																</select>
+															</div>
+														</div>
 														<div class="col-sm-12">
 															<div class="form-group form-group-default">
 																<label>Chất Liệu</label>
@@ -125,13 +138,13 @@
 														
 														<div class="col-md-6 pr-0">
 															<div class="form-group form-group-default">
-																<label>Size</label>
+																<label>Màu</label>
 																<select class="form-control"
 																	 name="size" th:field="*{size.sizeId}" id="sizeId">
 																	<option th:each="item : ${sizeList}"
 					  													th:value="${item.sizeId}" th:text="${item.nameSize}"
 																		th:selected="${item.sizeId == product.size.sizeId}">
-																		Size name
+																		Màu
 																	</option>
 																</select>
 															</div>
@@ -177,13 +190,13 @@
 														</div>
 														<div class="col-sm-12">
 															<div class="form-group form-group-default">
-																<label>Màu sắc</label>
+																<label>Kích thước</label>
 																<textarea th:field="*{description}" id="description" class="form-control" placeholder="Màu sắc"></textarea>
 															</div>
 														</div>
 														<div class="col-sm-12">
 															<div class="form-group form-group-default">
-																<label>Mô tả sản phẩm</label>
+																<label>Ngăn</label>
 																<input th:field="*{ghiChu}" id="ghiChu" onblur="formatTrim();" oninput="checktext();" type="text" class="form-control" placeholder="Mô tả sản phẩm...">
 																<span id="tb" style="display: none;color: red;">Không được để
 																	trống tên sản phẩm!</span>
@@ -219,14 +232,15 @@
 												<th>Ảnh</th>
 												<th>Tên sản phẩm</th>
 												<th>Thể loại</th>
-												<th>Size</th>
-												<th>Màu sắc</th>
+												<th>Màu</th>
+												<th>Kích thước</th>
 												<th>Chất Liệu</th>
+												<th>Hãng</th>
 												<th>Đơn giá</th>
 												<th>Giảm giá</th>
 												<th>Số lượng</th>
 												<th>Mã SP</th>
-												<th>Mô tả sản phẩm</th>
+												<th>Ngăn</th>
 												<th>QR sản phẩm</th>
 												<th style="width: 10%">Hành động</th>
 											</tr>
@@ -243,6 +257,7 @@
 												<td>[[${item.size.nameSize}]]</td>
 												<td>[[${item.description}]]</td>
 												<td>[[${item.chatLuong}]]</td>
+												<td>[[${item.hang.tenhang}]]</td>
 												<td th:text="${#numbers.formatDecimal(item.price, 1, 'DEFAULT', 0, 'DEFAULT')}+' đ'"></td>
 												<td>[[${#numbers.formatDecimal(item?.discount, 1, 'DEFAULT', 0, 'DEFAULT')}+' %']]</td>
 												<td>[[${item.quantity}]]</td>

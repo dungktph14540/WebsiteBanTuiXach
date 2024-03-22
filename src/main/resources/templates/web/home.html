@@ -14,6 +14,7 @@
 		content="organic, food, shop, ecommerce, store, html, bootstrap, template, agriculture, vegetables, products, farm, grocery, natural, online" />
 	<title>Web túi xách nam ADO</title>
 	<link rel="stylesheet" href="fonts/flaticon/flaticon.css" />
+	<link rel="stylesheet" href="fonts/icofont/icofont.min.css" />
 	<link rel="stylesheet" href="fonts/fontawesome/fontawesome.min.css" />
 	<link rel="stylesheet" href="vendor/venobox/venobox.min.css" />
 	<link rel="stylesheet" href="vendor/slickslider/slick.min.css" />
@@ -57,12 +58,12 @@
 		}
 
 		.flip-card-front {
-			background-color: #ffffff;
+			background-color: rgb(0, 0, 0);
 			color: black;
 		}
 
 		.flip-card-back {
-			background-color: #808080;
+			background-color: rgb(255,255,255);
 			color: white;
 			transform: rotateY(180deg);
 		}
@@ -126,7 +127,7 @@
 									<div class="flip-card-back">
 										<h6>
 										<a th:href="@{/productDetail(id=${item.productId})}">[[${item.productName}]]</a></h6>
-										<p>
+										<p class="text-dark">
 											<del>[[${#numbers.formatDecimal(item.price, 1, 'DEFAULT', 0, 'DEFAULT')}+'
 											đ']]</del>
 										<span>[[${#numbers.formatDecimal(item.price - (item.price * item.discount/100),
@@ -160,7 +161,7 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="promo-img">
-						<a href="javascript:void(0);"><img src="images/promo/home/bn.jpg" alt="promo"
+						<a href="javascript:void(0);"><img src="images/promo/home/bntxn.jpg" alt="promo"
 								style="width: 1299px; height: 405px;" /></a>
 					</div>
 				</div>
@@ -180,34 +181,27 @@
 				<div class="col">
 					<ul class="new-slider slider-arrow">
 						<li th:each="item : ${bestSaleProduct20}">
-							<div class="product-card">
-								<div class="product-media">
-									<div class="product-label">
-										<label class="label-text sale">- [[${item.discount + '%'}]]</label>
-									</div>
-
-									<a class="product-image" th:href="@{/productDetail(id=${item.productId})}">
+							<div class="flip-card">
+								<div class="flip-card-inner">
+									<div class="flip-card-front">
+										<a class="product-image" th:href="@{/productDetail(id=${item.productId})}">
 										<img th:src="@{'/loadImage?imageName='+${item.productImage}}" alt="product" />
 									</a>
-
-								</div>
-								<div class="product-content">
-
-
-									<h6 class="product-name">
-										<a th:href="@{/productDetail(id=${item.productId})}">[[${item.productName}]]</a>
-									</h6>
-									<h6 class="product-price">
-										<del>[[${#numbers.formatDecimal(item.price, 1, 'DEFAULT', 0, 'DEFAULT')}+'
+									</div>
+									<div class="flip-card-back">
+										<h6>
+										<a th:href="@{/productDetail(id=${item.productId})}">[[${item.productName}]]</a></h6>
+										<p class="text-dark">
+											<del>[[${#numbers.formatDecimal(item.price, 1, 'DEFAULT', 0, 'DEFAULT')}+'
 											đ']]</del>
 										<span>[[${#numbers.formatDecimal(item.price - (item.price * item.discount/100),
 											1, 'DEFAULT', 0, 'DEFAULT')}+' đ']]<small></small></span>
-									</h6>
-									<a class="product-add1" title="Thêm giỏ hàng"
+										</p>
+										<a class="product-add1" title="Thêm giỏ hàng"
 										th:href="@{/productDetail(id=${item.productId})}">
 										<i class="fas fa-shopping-basket"></i><span>Chi tiết sản phẩm</span>
 									</a>
-
+									</div>
 								</div>
 							</div>
 						</li>

@@ -141,24 +141,25 @@
 							</div>
 							<th:block th:if="${totalCartItems!=0}">
 								<div class="chekout-coupon">
-									<h4>Tổng tiền thanh toán</h4>
+									<h4>Tổng tiền</h4>
 								</div>
 								<div class="checkout-charge">
 									<ul>
 										<li>
-											<span>Tổng tiền hàng:</span>
+											<span>Tổng tiền sản phẩm:</span>
 											<span id="tong">[[${#numbers.formatDecimal(totalPrice, 1, 'DEFAULT', 0,
 												'DEFAULT')}+ ' đ']]</span>
 										</li>
-										<li>
-											<span>Phí vận chuyển:</span>
-											<span id="PhiVC">Đ</span>
-										</li>
+
 
 										<li>
-											<span>Tổng thanh toán:</span>
-											<span id=Tongtien></span>
+											<span>Thành tiền(Chưa tính phí ship):</span>
+											<span id=Tongtien> [[${#numbers.formatDecimal(totalPrice, 1, 'DEFAULT', 0,
+												'DEFAULT')}+ ' đ']]</span>
+
 										</li>
+										<span>Đặt hàng COD phí vận chuyển sẽ được cập nhật và gửi qua mail khi shop xác
+											nhận đơn hàng</span>
 									</ul>
 								</div>
 							</th:block>
@@ -173,26 +174,47 @@
 						</div>
 						<div class="account-content">
 							<div class="row">
-								<form class="user-form" th:action="@{/checkout}" th:object="${order}" method="post">
+								<form class="user-form" id="checkoutForm" th:action="@{/checkout}" th:object="${order}"
+									method="post">
+									<h6>Email</h6>
 									<div class="form-group">
 										<input type="email" th:value="${user.email}" class="form-control"
 											placeholder="Email" readonly="readonly" />
 									</div>
-
+									<h6>Người nhận</h6>
 									<div class="form-group">
-										<input type="text" th:value="${user.name}" class="form-control"
-											placeholder="Họ tên" readonly="readonly" />
+										<input type="text" id="tenuser" th:value="${user.name}" class="form-control"
+											placeholder="Họ tên" required="required" disabled/>
+									</div>
+									<h6>Người nhận mới</h6>
+									<div class="form-group">
+										<input type="text" name="tenkh" id="tenkh" class="form-control"
+											placeholder="Họ tên" required="required" />
+									</div>
+									<div class="row">
+									<div class="form-group mt-3 col-sm-12">
+										<h6>Chọn địa chỉ</h6>
+											<select  class="form-control col-sm-3" name="" id="province">
+											</select>
+											<select  class="form-control col-sm-3" name="" id="district">
+												<option value="">chọn quận</option>
+											</select>
+											<select  class="form-control col-sm-3" name="" id="ward">
+												<option value="">chọn phường</option>
+											</select>
+										<h5 id="result"></h5>
 									</div>
 
-
-									<div class="form-group mt-3">
+									</div>
+									<h6>Địa chỉ cụ thể</h6>
+									<div class="form-group mt-2">
 										<input type="text" th:value="${user.address}" onblur="formatTrim();"
 											oninput="checktext();" id="resultInput" name="address" class="form-control"
 											placeholder="Địa chỉ" required="required" />
 										<span id="tb" style="display: none;color: red">Không được để
 											trống!</span>
 									</div>
-
+									<h6>Số điện thoại</h6>
 									<div class="form-group">
 										<input type="text" th:value="${user.sdt}" onblur="formatTrim();formatPhone();"
 											oninput="checktext();" id="phone" name="phone" class="form-control"
@@ -202,50 +224,41 @@
 										<span id="tbphone" style="display: none; color: red;">Phone không hợp lệ!</span>
 									</div>
 
-									<div class="form-group">
-										<input type="text" class="form-control" placeholder="Nội dung đơn hàng" />
+									<div class="row">
+
+										<div class="col-6">
+											<h6>Chọn loại hình vận chuyển</h6>
+											<div class="form-check">
+												<input class="form-check-input" type="radio" name="loaiShip"
+													id="flexRadioDefault1" th:field="*{loaiShip}" value="Ship hỏa tốc">
+												<label class="form-check-label" for="flexRadioDefault1">
+													Ship Hỏa tốc
+												</label>
+											</div>
+											<div class="form-check">
+												<input class="form-check-input" type="radio" name="loaiShip"
+													id="flexRadioDefault2" th:field="*{loaiShip}"
+													value="Chuyển phát nhanh" checked>
+												<label class="form-check-label" for="flexRadioDefault2">
+													Chuyển phát nhanh
+												</label>
+											</div>
+
+											<div class="form-check">
+												<input class="form-check-input" type="radio" name="loaiShip"
+													id="flexRadioDefault3" th:field="*{loaiShip}"
+													value="Chuyển phát tiết kiệm hàng hóa">
+												<label class="form-check-label" for="flexRadioDefault3">
+													Chuyển phát tiết kiệm hàng hóa
+												</label>
+											</div>
+										</div>
+										<div class="col-6">
+											<h6>Đơn vị vận chuyển</h6>
+											<img src="images/logovt.jpg" alt="Loại hình vận chuyển"
+												style="width: 120px; height: 100px;">
+										</div>
 									</div>
-									<div class="form-group mt-3">
-										<h6>Chọn danh sách tỉnh</h6>
-
-										<select name="" id="province">
-										</select>
-										<select name="" id="district">
-											<option value="">chọn quận</option>
-										</select>
-										<select name="" id="ward">
-											<option value="">chọn phường</option>
-										</select>
-
-
-
-										<h5 id="result"></h5>
-
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="flexRadioDefault"
-											id="flexRadioDefault1" th:field="*{loaiShip}" value="Ship hỏa tốc">
-										<label class="form-check-label" for="flexRadioDefault1">
-											Ship Hỏa tốc
-										</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="flexRadioDefault"
-											id="flexRadioDefault2" th:field="*{loaiShip}" value="Chuyển phát nhanh" checked>
-										<label class="form-check-label" for="flexRadioDefault2">
-											Chuyển phát nhanh
-										</label>
-									</div>
-									
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="flexRadioDefault"
-											id="flexRadioDefault3" th:field="*{loaiShip}"
-											value="Chuyển phát tiết kiệm hàng hóa">
-										<label class="form-check-label" for="flexRadioDefault3">
-											Chuyển phát tiết kiệm hàng hóa
-										</label>
-									</div>
-
 									<div class="form-group">
 										<div class="account-title">
 											<h4>Chọn phương thức thanh toán</h4>
@@ -258,12 +271,73 @@
 										<div class="radio">
 											<label style="color: rgb(128, 128, 128)"><input type="radio" value="paypal"
 													name="checkOut">
-												<strong><em>Thanh Toán Với Paypal (Ưu đãi phí ship
-														30000Đ)</em></strong></label>
+												<strong><em>Thanh Toán Với Paypal (Ưu đãi chuyển phát nhanh với phí ship
+														20.000Đ)</em></strong></label>
 										</div>
 									</div>
+									<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+									<script>
+										document.addEventListener('DOMContentLoaded', function () {
+											// Lấy tham chiếu đến các radiobutton
+											var radioChuyenPhatNhanh = document.getElementById('flexRadioDefault2');
+											var radioChuyenPhatNhanhLabel = document.querySelector('label[for=flexRadioDefault2]');
+											var radioThanhToanPaypal = document.querySelector('input[name=checkOut][value=paypal]');
+
+											// Thêm sự kiện click cho radiobutton "Thanh toán với Paypal"
+											radioThanhToanPaypal.addEventListener('click', function () {
+												// Nếu chọn "Thanh toán với Paypal", tự động chọn "Chuyển phát nhanh"
+												radioChuyenPhatNhanh.checked = true;
+												// (Optional) Gắn thêm hiển thị mặt đỏ cho radiobutton "Chuyển phát nhanh"
+
+											});
+										});
+									</script>
+									<script>
+										function validateAndSubmitForm() {
+											// Kiểm tra số điện thoại
+
+											var phoneNumber = document.getElementById("phone").value;
+											var phoneNumberRegex = /^(0[23456789]|1[6789])[0-9]{8}$/;
+											var selectedPaymentMethod = document.querySelector('input[name="loaiShip"]:checked');
+											if (!phoneNumberRegex.test(phoneNumber)) {
+												alert("Số điện thoại không hợp lệ! Vui lòng nhập theo định dạng Việt Nam.");
+												return false; // Ngăn chặn việc submit form nếu số điện thoại không hợp lệ
+											} else if (!selectedPaymentMethod) {
+												alert("Vui lòng chọn phương thức vận chuyển!");
+												return false; // Ngăn chặn việc submit form nếu không có radio button nào được chọn
+											}
+											else {
+												$('#configmationIdDATHANG').modal('show');
+											}
+											// Kiểm tra radio button
+
+
+											// Nếu số điện thoại và radio button hợp lệ, tiếp tục submit form
+
+										}
+
+
+
+
+									</script>
+									<script>
+
+
+										function submitOrder() {
+											// Đóng modal xác nhận
+											$('#configmationIdDATHANG').modal('hide');
+
+											// Submit form
+
+											document.getElementById("checkoutForm").submit();
+										}
+									</script>
+
+
 									<div class="checkout-proced">
-										<button type="submit" id="DH" class="btn btn-inline">Đặt hàng</button>
+										<button type="button" id="DH" onclick="validateAndSubmitForm()"
+											class="btn btn-inline">Đặt
+											hàng</button>
 									</div>
 								</form>
 							</div>
@@ -360,6 +434,9 @@
 		  console.log(tong);
 		  $('#tong').html(tong + ' đ');
 		} */
+	</script>
+	<script>
+		
 	</script>
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<section class="news-part" style="background: url(images/) no-repeat center">
@@ -464,7 +541,28 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal" id="configmationIdDATHANG">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<button class="modal-close" data-bs-dismiss="modal">
+					<i class="icofont-close"></i>
+				</button>
+				<div class="modal-form">
+					<h5 class="modal-title">Xác nhận</h5>
+					<div class="modal-body">
+						<p>
+							Bạn có muốn đặt hàng không?
+						</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Không</button>
+						<button type="button" class="btn btn-primary" onclick="submitOrder()">Có</button>
+					</div>
+				</div>
 
+			</div>
+		</div>
+	</div>
 
 	<!--************************************
 				Footer Start
