@@ -70,11 +70,10 @@ public class UserPDFExporter {
 	        return totalAmount;
 	    }
 	    private String getPurchaseDate() {
+	        
 	    	for (InvoiceDetail user : listCate) {
-	    	    java.util.Date purchaseDate = user.getInvoice().getInvoiceDate();
-
-	    	    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
-	    	    String formattedDate = dateFormat.format(purchaseDate);
+	            Date purchaseDate = (Date) user.getInvoice().getInvoiceDate(); 
+		        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		        return dateFormat.format(purchaseDate);
 	        }
 	        
